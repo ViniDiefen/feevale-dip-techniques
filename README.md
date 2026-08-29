@@ -1,4 +1,4 @@
-# Welcome to Feevale PDI Techniques!
+# Welcome to Feevale DIP Techniques!
 
 A modern, production-ready template for building full-stack React applications using React Router.
 
