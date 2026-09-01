@@ -50,7 +50,7 @@ function renderMenuSeparator(index: number) {
 function renderMenuItem(item: MenuItem) {
   const Icon = item.icon;
   return (
-    <MenubarItem key={item.label} variant={item.variant}>
+    <MenubarItem key={item.label} variant={item.variant} onClick={() => item.command.execute()}>
       <Icon />
       {item.label}
       {item.shortcut && <MenubarShortcut>{item.shortcut}</MenubarShortcut>}
