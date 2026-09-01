@@ -1,11 +1,12 @@
 import {
-  FileIcon,
-  FolderIcon,
-  HelpCircleIcon,
-  SaveIcon,
-  SettingsIcon,
-  TrashIcon,
-  type LucideIcon,
+  BlendIcon,
+  ContrastIcon,
+  FlipHorizontalIcon,
+  MoveIcon,
+  RotateCwIcon,
+  ScalingIcon,
+  SunIcon,
+  type LucideIcon
 } from "lucide-react";
 
 export type MenuItem = {
@@ -29,21 +30,20 @@ export type Menu = {
 
 export const menus: Menu[] = [
   {
-    label: "File",
+    label: "Transformações Geométricas",
     items: [
-      { type: "item", label: "New File", icon: FileIcon, shortcut: "⌘N" },
-      { type: "item", label: "Open Folder", icon: FolderIcon },
-      { type: "separator" },
-      { type: "item", label: "Save", icon: SaveIcon, shortcut: "⌘S" },
+      { type: "item", label: "Translação", icon: MoveIcon, shortcut: "⌘N" },
+      { type: "item", label: "Escala", icon: ScalingIcon },
+      { type: "item", label: "Rotação", icon: RotateCwIcon },
+      { type: "item", label: "Espelhamento", icon: FlipHorizontalIcon, shortcut: "⌘S" },
     ],
   },
   {
-    label: "More",
+    label: "Filtros",
     items: [
-      { type: "item", label: "Settings", icon: SettingsIcon },
-      { type: "item", label: "Help", icon: HelpCircleIcon },
-      { type: "separator" },
-      { type: "item", label: "Delete", icon: TrashIcon, variant: "destructive" },
+      { type: "item", label: "Escalas de cinza", icon: BlendIcon },
+      { type: "item", label: "Brilho", icon: SunIcon },
+      { type: "item", label: "Contraste", icon: ContrastIcon },
     ],
   },
 ];
