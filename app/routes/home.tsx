@@ -1,4 +1,4 @@
-import { AppMenu } from "@/components/app-menu";
+import { Menubar } from "@/components/Menubar";
 import type { Route } from "./+types/home";
 
 export function meta({}: Route.MetaArgs) {
@@ -13,5 +13,5 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export default function Home() {
-  return <AppMenu />;
+  return <Menubar />;
 }

@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/menubar";
 import { menus, type Menu, type MenuEntry, type MenuItem } from "@/data/menu";
 
-export function AppMenu() {
+export function Menubar() {
   return (
     <Menubar className="w-full rounded-none border-x-0 border-t-0 h-12">
       {menus.map(renderMenu)}
