@@ -9,9 +9,14 @@ import {
 } from "@/components/ui/menubar";
 import { menus, type Menu, type MenuEntry, type MenuItem } from "@/data/menu";
 
+const styles = {
+  menubar: "w-full rounded-none border-x-0 border-t-0 h-12",
+  trigger: "h-10 px-3",
+} as const;
+
 export function Menubar() {
   return (
-    <Menubar className="w-full rounded-none border-x-0 border-t-0 h-12">
+    <Menubar className={styles.menubar}>
       {menus.map(renderMenu)}
     </Menubar>
   );
@@ -20,18 +25,18 @@ export function Menubar() {
 function renderMenu(menu: Menu) {
   return (
     <MenubarMenu key={menu.label}>
-      <MenubarTrigger className="h-10 px-3">{menu.label}</MenubarTrigger>
+      <MenubarTrigger className={styles.trigger}>{menu.label}</MenubarTrigger>
       <MenubarContent>{menu.items.map(renderMenuEntry)}</MenubarContent>
     </MenubarMenu>
   );
 }
 
 function renderMenuEntry(item: MenuEntry, index: number) {
-  if (item.type === "separator") {
-    return renderMenuSeparator(index);
-  }
-  if (item.type === "item") {
-    return renderMenuItem(item);
+  switch (item.type) {
+    case "separator":
+      return renderMenuSeparator(index);
+    case "item":
+      return renderMenuItem(item);
   }
 }
 
