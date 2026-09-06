@@ -1,5 +1,5 @@
 import {
-  Menubar,
+  Menubar as MenubarUI,
   MenubarContent,
   MenubarItem,
   MenubarMenu,
@@ -16,9 +16,9 @@ const styles = {
 
 export function Menubar() {
   return (
-    <Menubar className={styles.menubar}>
+    <MenubarUI className={styles.menubar}>
       {menus.map(renderMenu)}
-    </Menubar>
+    </MenubarUI>
   );
 }
 
