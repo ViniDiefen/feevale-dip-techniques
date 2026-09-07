@@ -14,8 +14,8 @@ export class BrightnessCommand extends BaseCommand<BrightnessParams> {
       key: "amount",
       label: "Quantidade",
       type: "number" as const,
-      min: -100,
-      max: 100,
+      min: -255,
+      max: 255,
       step: 1,
     },
   ];
