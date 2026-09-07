@@ -4,7 +4,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/shared/lib/utils";
 import { useDragReorder } from "@/shared/hooks";
-import type { Layer } from "@/layers/types";
+import type { CommandLayer } from "@/layers/types";
 
 const styles = {
   list: "min-h-[120px]",
@@ -19,7 +19,7 @@ const styles = {
 } as const;
 
 interface LayersPanelProps {
-  layers: Layer[];
+  layers: CommandLayer[];
   onReorder: (fromIndex: number, toIndex: number) => void;
   onRemove: (id: string) => void;
 }
@@ -27,15 +27,13 @@ interface LayersPanelProps {
 export function LayersPanel({ layers, onReorder, onRemove }: LayersPanelProps) {
   const { dragIndex, overIndex, getDragProps } = useDragReorder({ onReorder });
 
-  const commandLayers = layers.filter((l) => l.type === "command").reverse();
-
-  if (commandLayers.length === 0) {
+  if (layers.length === 0) {
     return <div className={styles.empty}>Nenhuma camada aplicada</div>;
   }
 
   return (
     <ul className={styles.list}>
-      {commandLayers.map((layer, index) => (
+      {layers.map((layer, index) => (
         <li
           key={layer.id}
           {...getDragProps(index)}

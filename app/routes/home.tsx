@@ -114,6 +114,11 @@ export default function Home() {
     [originalCanvas]
   );
 
+  const commandLayers = useMemo(
+    () => layers.filter((l) => l.type === "command").reverse(),
+    [layers]
+  );
+
   const imageLayer = layers.find((l) => l.type === "image");
 
   return (
@@ -140,9 +145,15 @@ export default function Home() {
           }
         >
           <LayersPanel
-            layers={layers}
+            layers={commandLayers}
             onReorder={(from, to) =>
-              setLayers((prev) => reorder(prev, from, to))
+              setLayers((prev) => {
+                const commands = prev.filter((l) => l.type === "command");
+                const images = prev.filter((l) => l.type === "image");
+                const fromOrig = commands.length - 1 - from;
+                const toOrig = commands.length - 1 - to;
+                return [...images, ...reorder(commands, fromOrig, toOrig)];
+              })
             }
             onRemove={(id) =>
               setLayers((prev) => remove(prev, id, "id"))
