@@ -12,7 +12,7 @@ function applyLayers(
   let canvas = original;
   const commandLayers = layers.filter((l) => l.type === "command");
   for (const layer of commandLayers) {
-    canvas = layer.command.execute(canvas, layer.command.defaultParams);
+    canvas = layer.command.execute(canvas, layer.params);
   }
   return canvas;
 }
@@ -21,6 +21,7 @@ export function useEditor() {
   const [image, setImage] = useState<File>();
   const [originalCanvas, setOriginalCanvas] = useState<HTMLCanvasElement>();
   const [layers, setLayers] = useState<Layer[]>([]);
+  const [selectedLayerId, setSelectedLayerId] = useState<string | null>(null);
 
   const handleImageLoad = useCallback((file: File | undefined) => {
     if (!file) return;
@@ -73,15 +74,18 @@ export function useEditor() {
   const handleCommandExecute = useCallback(
     (item: MenuItem) => {
       if (!originalCanvas) return;
+      const id = `layer-${++layerIdCounter}`;
       setLayers((prev) => [
         ...prev,
         {
-          id: `layer-${++layerIdCounter}`,
+          id,
           type: "command",
           command: item.command,
+          params: item.command.defaultParams,
           appliedAt: new Date(),
         },
       ]);
+      setSelectedLayerId(id);
     },
     [originalCanvas]
   );
@@ -105,17 +109,36 @@ export function useEditor() {
 
   const handleRemove = useCallback((id: string) => {
     setLayers((prev) => remove(prev, id, "id"));
+    setSelectedLayerId((prev) => (prev === id ? null : prev));
   }, []);
+
+  const handleLayerSelect = useCallback((id: string | null) => {
+    setSelectedLayerId(id);
+  }, []);
+
+  const handleLayerParamsUpdate = useCallback((id: string, params: any) => {
+    setLayers((prev) =>
+      prev.map((l) => (l.id === id && l.type === "command" ? { ...l, params } : l))
+    );
+  }, []);
+
+  const selectedLayer = useMemo(
+    () => (selectedLayerId ? layers.find((l) => l.id === selectedLayerId) ?? null : null),
+    [layers, selectedLayerId]
+  );
 
   return {
     image,
     processedCanvas,
     commandLayers,
     imageLayer,
+    selectedLayer,
     handleImageLoad,
     handleImageRemove,
     handleCommandExecute,
     handleReorder,
     handleRemove,
+    handleLayerSelect,
+    handleLayerParamsUpdate,
   };
 }

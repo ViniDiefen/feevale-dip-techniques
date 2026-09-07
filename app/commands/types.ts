@@ -1,6 +1,6 @@
 import type { LucideIcon } from "lucide-react";
 
-export interface ParamSchema {
+export interface NumberParamSchema {
   key: string;
   label: string;
   type: "number";
@@ -8,6 +8,15 @@ export interface ParamSchema {
   max: number;
   step: number;
 }
+
+export interface SelectParamSchema {
+  key: string;
+  label: string;
+  type: "select";
+  options: { value: string; label: string }[];
+}
+
+export type ParamSchema = NumberParamSchema | SelectParamSchema;
 
 export interface Command<P = void> {
   label: string;

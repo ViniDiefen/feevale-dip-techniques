@@ -5,6 +5,7 @@ import { ImagePicker } from "@/features/image/components/ImagePicker";
 import { ImagePreview } from "@/features/editor/components/ImagePreview";
 import { FloatingPanel } from "@/features/editor/components/FloatingPanel";
 import { LayersPanel } from "@/features/editor/components/LayersPanel";
+import { CommandParamsPanel } from "@/features/editor/components/CommandParamsPanel";
 import { useEditor } from "@/features/editor/hooks/useEditor";
 
 const styles = {
@@ -34,11 +35,14 @@ export default function Home() {
     processedCanvas,
     commandLayers,
     imageLayer,
+    selectedLayer,
     handleImageLoad,
     handleImageRemove,
     handleCommandExecute,
     handleReorder,
     handleRemove,
+    handleLayerSelect,
+    handleLayerParamsUpdate,
   } = useEditor();
 
   return (
@@ -66,8 +70,25 @@ export default function Home() {
         >
           <LayersPanel
             layers={commandLayers}
+            selectedLayerId={selectedLayer?.id ?? null}
             onReorder={handleReorder}
             onRemove={handleRemove}
+            onSelect={handleLayerSelect}
+          />
+        </FloatingPanel>
+      ) : null}
+      {selectedLayer !== null && selectedLayer.type === "command" ? (
+        <FloatingPanel
+          title={`${selectedLayer.command.label} — Parâmetros`}
+          defaultPosition={{
+            x: window.innerWidth - 288 - 288 - 6,
+            y: window.innerHeight - 240 - 3,
+          }}
+          height={200}
+        >
+          <CommandParamsPanel
+            layer={selectedLayer}
+            onParamsUpdate={(params) => handleLayerParamsUpdate(selectedLayer.id, params)}
           />
         </FloatingPanel>
       ) : null}

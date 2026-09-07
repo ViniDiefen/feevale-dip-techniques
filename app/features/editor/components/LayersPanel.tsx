@@ -10,6 +10,7 @@ const styles = {
   list: "min-h-[120px]",
   empty: "flex items-center justify-center h-[120px] text-xs text-muted-foreground",
   item: "group flex items-center gap-2 px-3 py-2 text-sm cursor-grab active:cursor-grabbing hover:bg-accent/50 transition-colors",
+  itemSelected: "bg-accent/70",
   dragHandle: "shrink-0 pointer-events-none text-muted-foreground/50 group-hover:text-muted-foreground",
   icon: "shrink-0 pointer-events-none text-muted-foreground",
   name: "flex-1 truncate pointer-events-none",
@@ -20,11 +21,13 @@ const styles = {
 
 interface LayersPanelProps {
   layers: CommandLayer[];
+  selectedLayerId: string | null;
   onReorder: (fromIndex: number, toIndex: number) => void;
   onRemove: (id: string) => void;
+  onSelect: (id: string | null) => void;
 }
 
-export function LayersPanel({ layers, onReorder, onRemove }: LayersPanelProps) {
+export function LayersPanel({ layers, selectedLayerId, onReorder, onRemove, onSelect }: LayersPanelProps) {
   const { dragIndex, overIndex, getDragProps } = useDragReorder({ onReorder });
 
   if (layers.length === 0) {
@@ -40,15 +43,17 @@ export function LayersPanel({ layers, onReorder, onRemove }: LayersPanelProps) {
           className={cn(
             styles.item,
             dragIndex === index && styles.dragging,
-            overIndex === index && dragIndex !== index && styles.dragOver
+            overIndex === index && dragIndex !== index && styles.dragOver,
+            selectedLayerId === layer.id && styles.itemSelected
           )}
+          onClick={() => onSelect(selectedLayerId === layer.id ? null : layer.id)}
         >
           <GripVertical size={14} className={styles.dragHandle} />
           <layer.command.icon size={14} className={styles.icon} />
           <span className={styles.name}>{layer.command.label}</span>
           <button
             className={cn(styles.removeButton, dragIndex !== null && "pointer-events-none")}
-            onClick={() => onRemove(layer.id)}
+            onClick={(e) => { e.stopPropagation(); onRemove(layer.id); }}
             aria-label="Remover camada"
           >
             <Trash2 size={14} />

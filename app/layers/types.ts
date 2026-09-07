@@ -1,9 +1,10 @@
 import type { Command } from "@/commands/types";
 
-export interface CommandLayer {
+export interface CommandLayer<P = any> {
   id: string;
   type: "command";
-  command: Command;
+  command: Command<P>;
+  params: P;
   appliedAt: Date;
 }
 
