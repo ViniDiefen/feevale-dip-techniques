@@ -2,42 +2,30 @@ import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 
 const styles = {
-  container: "relative flex items-center justify-center overflow-hidden rounded-lg bg-background",
-  image: "max-h-full max-w-full object-contain",
-  error: "text-xs text-destructive",
+  container: "relative flex items-center justify-center overflow-auto rounded-lg bg-background",
+  image: "object-contain",
 } as const;
 
 interface ImagePreviewProps {
-  image: File;
+  canvas?: HTMLCanvasElement;
   className?: string;
 }
 
-export function ImagePreview({ image, className }: ImagePreviewProps) {
+export function ImagePreview({ canvas, className }: ImagePreviewProps) {
   const [src, setSrc] = useState<string>();
-  const [error, setError] = useState<string>();
 
   useEffect(() => {
-    const objectUrl = URL.createObjectURL(image);
-    setSrc(objectUrl);
-    setError(undefined);
-
-    return () => URL.revokeObjectURL(objectUrl);
-  }, [image]);
+    if (!canvas) {
+      setSrc(undefined);
+      return;
+    }
+    setSrc(canvas.toDataURL());
+  }, [canvas]);
 
   return (
     <div className={cn(styles.container, className)}>
       {src && (
-        <img
-          src={src}
-          alt={image.name}
-          className={styles.image}
-          onError={() => setError("Erro ao carregar imagem")}
-        />
-      )}
-      {error && (
-        <p className={styles.error} role="alert">
-          {error}
-        </p>
+        <img src={src} className={styles.image} alt="Preview" />
       )}
     </div>
   );

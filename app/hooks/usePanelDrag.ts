@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 interface Position {
   x: number;
@@ -35,6 +35,12 @@ export function usePanelDrag({
     }),
     [panelWidth, panelHeight, topOffset, margin]
   );
+
+  useEffect(() => {
+    const handleResize = () => setPosition((prev) => clamp(prev.x, prev.y));
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [clamp]);
 
   const handleMouseMove = useCallback(
     (e: MouseEvent) => {
