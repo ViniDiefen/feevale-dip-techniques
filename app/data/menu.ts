@@ -1,11 +1,11 @@
 import type { Command } from "@/commands/types";
-import { TranslationCommand } from "@/commands/translation";
-import { ScaleCommand } from "@/commands/scale";
-import { RotationCommand } from "@/commands/rotation";
-import { MirrorCommand } from "@/commands/mirror";
-import { GrayscaleCommand } from "@/commands/grayscale";
-import { BrightnessCommand } from "@/commands/brightness";
-import { ContrastCommand } from "@/commands/contrast";
+import { TranslationCommand } from "@/commands/transforms/translation";
+import { ScaleCommand } from "@/commands/transforms/scale";
+import { RotationCommand } from "@/commands/transforms/rotation";
+import { MirrorCommand } from "@/commands/transforms/mirror";
+import { GrayscaleCommand } from "@/commands/filters/grayscale";
+import { BrightnessCommand } from "@/commands/filters/brightness";
+import { ContrastCommand } from "@/commands/filters/contrast";
 
 export type MenuItem = {
   type: "item";
