@@ -1,7 +1,8 @@
-import type { Command } from "./types";
+import { BlendIcon } from "lucide-react";
+import { BaseCommand } from "./base";
 
-export class GrayscaleCommand implements Command {
-  execute(): void {
-    console.log("Grayscale executed");
-  }
+export class GrayscaleCommand extends BaseCommand {
+  label = "Escalas de cinza";
+  icon = BlendIcon;
+  defaultParams = undefined;
 }

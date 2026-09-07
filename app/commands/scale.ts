@@ -1,7 +1,12 @@
-import type { Command } from "./types";
+import { ScalingIcon } from "lucide-react";
+import { BaseCommand } from "./base";
 
-export class ScaleCommand implements Command {
-  execute(): void {
-    console.log("Scale executed");
-  }
+export interface ScaleParams {
+  factor: number;
+}
+
+export class ScaleCommand extends BaseCommand<ScaleParams> {
+  label = "Escala";
+  icon = ScalingIcon;
+  defaultParams: ScaleParams = { factor: 1 };
 }

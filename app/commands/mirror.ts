@@ -1,7 +1,8 @@
-import type { Command } from "./types";
+import { FlipHorizontalIcon } from "lucide-react";
+import { BaseCommand } from "./base";
 
-export class MirrorCommand implements Command {
-  execute(): void {
-    console.log("Mirror executed");
-  }
+export class MirrorCommand extends BaseCommand {
+  label = "Espelhamento";
+  icon = FlipHorizontalIcon;
+  defaultParams = undefined;
 }

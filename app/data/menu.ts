@@ -1,13 +1,3 @@
-import {
-  BlendIcon,
-  ContrastIcon,
-  FlipHorizontalIcon,
-  MoveIcon,
-  RotateCwIcon,
-  ScalingIcon,
-  SunIcon,
-  type LucideIcon
-} from "lucide-react";
 import type { Command } from "@/commands/types";
 import { TranslationCommand } from "@/commands/translation";
 import { ScaleCommand } from "@/commands/scale";
@@ -19,11 +9,9 @@ import { ContrastCommand } from "@/commands/contrast";
 
 export type MenuItem = {
   type: "item";
-  label: string;
-  icon: LucideIcon;
+  command: Command<any>;
   shortcut?: string;
   variant?: "default" | "destructive";
-  command: Command;
 };
 
 export type MenuSeparator = {
@@ -41,18 +29,18 @@ export const menus: Menu[] = [
   {
     label: "Transformações Geométricas",
     items: [
-      { type: "item", label: "Translação", icon: MoveIcon, command: new TranslationCommand() },
-      { type: "item", label: "Escala", icon: ScalingIcon, command: new ScaleCommand() },
-      { type: "item", label: "Rotação", icon: RotateCwIcon, command: new RotationCommand() },
-      { type: "item", label: "Espelhamento", icon: FlipHorizontalIcon, command: new MirrorCommand() },
+      { type: "item", command: new TranslationCommand() },
+      { type: "item", command: new ScaleCommand() },
+      { type: "item", command: new RotationCommand() },
+      { type: "item", command: new MirrorCommand() },
     ],
   },
   {
     label: "Filtros",
     items: [
-      { type: "item", label: "Escalas de cinza", icon: BlendIcon, command: new GrayscaleCommand() },
-      { type: "item", label: "Brilho", icon: SunIcon, command: new BrightnessCommand() },
-      { type: "item", label: "Contraste", icon: ContrastIcon, command: new ContrastCommand() },
+      { type: "item", command: new GrayscaleCommand() },
+      { type: "item", command: new BrightnessCommand() },
+      { type: "item", command: new ContrastCommand() },
     ],
   },
 ];

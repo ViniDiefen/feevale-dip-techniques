@@ -1,7 +1,12 @@
-import type { Command } from "./types";
+import { ContrastIcon } from "lucide-react";
+import { BaseCommand } from "./base";
 
-export class ContrastCommand implements Command {
-  execute(): void {
-    console.log("Contrast executed");
-  }
+export interface ContrastParams {
+  factor: number;
+}
+
+export class ContrastCommand extends BaseCommand<ContrastParams> {
+  label = "Contraste";
+  icon = ContrastIcon;
+  defaultParams: ContrastParams = { factor: 1 };
 }
