@@ -2,8 +2,12 @@ import { FlipHorizontalIcon } from "lucide-react";
 import { BaseCommand } from "../base";
 import { applyMatrix, type Matrix3x3 } from "../matrix";
 
-function mirrorMatrix(horizontal: boolean, width: number): Matrix3x3 {
-  if (horizontal) {
+export interface MirrorParams {
+  direction: "horizontal" | "vertical";
+}
+
+function mirrorMatrix(direction: "horizontal" | "vertical", width: number, height: number): Matrix3x3 {
+  if (direction === "horizontal") {
     return [
       [-1, 0, width - 1],
       [0, 1, 0],
@@ -12,19 +16,29 @@ function mirrorMatrix(horizontal: boolean, width: number): Matrix3x3 {
   }
   return [
     [1, 0, 0],
-    [0, -1, 0],
+    [0, -1, height - 1],
     [0, 0, 1],
   ];
 }
 
-export class MirrorCommand extends BaseCommand {
+export class MirrorCommand extends BaseCommand<MirrorParams> {
   label = "Espelhamento";
   icon = FlipHorizontalIcon;
-  params = [];
-  defaultParams = undefined;
+  params = [
+    {
+      key: "direction",
+      label: "Direção",
+      type: "select" as const,
+      options: [
+        { value: "horizontal", label: "Horizontal" },
+        { value: "vertical", label: "Vertical" },
+      ],
+    },
+  ];
+  defaultParams: MirrorParams = { direction: "horizontal" };
 
-  execute(image: HTMLCanvasElement): HTMLCanvasElement {
-    const matrix = mirrorMatrix(true, image.width);
+  execute(image: HTMLCanvasElement, params: MirrorParams): HTMLCanvasElement {
+    const matrix = mirrorMatrix(params.direction, image.width, image.height);
     return applyMatrix(image, matrix);
   }
 }
