@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { usePanelDrag } from "@/shared/hooks";
+import { usePanelDrag } from "@/shared/hooks/usePanelDrag";
 
 const PANEL_WIDTH = 288;
 const MENUBAR_HEIGHT = 48;

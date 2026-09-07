@@ -1,14 +1,11 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
 import { Image as ImageIcon, Trash2 } from "lucide-react";
-import { Menubar } from "@/features/editor";
+import { Menubar } from "@/features/editor/components/Menubar";
 import type { Route } from "./+types/home";
-import { ImagePicker } from "@/features/image";
-import { ImagePreview } from "@/features/editor";
-import { FloatingPanel } from "@/features/editor";
-import { LayersPanel } from "@/features/editor";
-import type { Layer } from "@/layers/types";
-import type { MenuItem } from "@/data/menu";
-import { reorder, remove } from "@/shared/lib/utils";
+import { ImagePicker } from "@/features/image/components/ImagePicker";
+import { ImagePreview } from "@/features/editor/components/ImagePreview";
+import { FloatingPanel } from "@/features/editor/components/FloatingPanel";
+import { LayersPanel } from "@/features/editor/components/LayersPanel";
+import { useEditor } from "@/features/editor/hooks/useEditor";
 
 const styles = {
   layout: "flex flex-col h-screen",
@@ -31,102 +28,25 @@ export function meta({ }: Route.MetaArgs) {
   ];
 }
 
-let layerIdCounter = 0;
-
-function applyLayers(
-  original: HTMLCanvasElement,
-  layers: Layer[]
-): HTMLCanvasElement {
-  let canvas = original;
-  const commandLayers = layers.filter((l) => l.type === "command");
-  for (const layer of commandLayers) {
-    canvas = layer.command.execute(canvas, layer.command.defaultParams);
-  }
-  return canvas;
-}
-
 export default function Home() {
-  const [image, setImage] = useState<File>();
-  const [originalCanvas, setOriginalCanvas] = useState<HTMLCanvasElement>();
-  const [layers, setLayers] = useState<Layer[]>([]);
-
-  const handleImageLoad = useCallback((file: File | undefined) => {
-    if (!file) return;
-    setImage(file);
-    const img = new Image();
-    img.onload = () => {
-      const canvas = document.createElement("canvas");
-      canvas.width = img.width;
-      canvas.height = img.height;
-      const ctx = canvas.getContext("2d", { willReadFrequently: true })!;
-      ctx.drawImage(img, 0, 0);
-      setOriginalCanvas(canvas);
-      setLayers([{
-        id: `layer-${++layerIdCounter}`,
-        type: "image",
-        image: file,
-        appliedAt: new Date(),
-      }]);
-    };
-    img.src = URL.createObjectURL(file);
-  }, []);
-
-  useEffect(() => {
-    if (!import.meta.env.DEV) return;
-
-    let cancelled = false;
-
-    fetch("/lena.jpg")
-      .then((res) => res.blob())
-      .then((blob) => {
-        if (cancelled) return;
-        const file = new File([blob], "lena.jpg", { type: "image/jpeg" });
-        handleImageLoad(file);
-      });
-
-    return () => { cancelled = true; };
-  }, [handleImageLoad]);
-
-  const processedCanvas = useMemo(() => {
-    if (!originalCanvas) return undefined;
-    return applyLayers(originalCanvas, layers);
-  }, [originalCanvas, layers]);
-
-  const handleImageRemove = useCallback(() => {
-    setImage(undefined);
-    setOriginalCanvas(undefined);
-    setLayers([]);
-  }, []);
-
-  const handleCommandExecute = useCallback(
-    (item: MenuItem) => {
-      if (!originalCanvas) return;
-      setLayers((prev) => [
-        ...prev,
-        {
-          id: `layer-${++layerIdCounter}`,
-          type: "command",
-          command: item.command,
-          appliedAt: new Date(),
-        },
-      ]);
-    },
-    [originalCanvas]
-  );
-
-  const commandLayers = useMemo(
-    () => layers.filter((l) => l.type === "command").reverse(),
-    [layers]
-  );
-
-  const imageLayer = layers.find((l) => l.type === "image");
+  const {
+    image,
+    processedCanvas,
+    commandLayers,
+    imageLayer,
+    handleImageLoad,
+    handleImageRemove,
+    handleCommandExecute,
+    handleReorder,
+    handleRemove,
+  } = useEditor();
 
   return (
     <div className={styles.layout}>
-      {!image && <ImagePicker className={styles.picker} onChange={handleImageLoad} />}
-      {image && <Menubar onCommandExecute={handleCommandExecute} />}
-      {image && <ImagePreview canvas={processedCanvas} className={styles.preview} />}
-      {image && imageLayer && (
+      {image === undefined ? <ImagePicker className={styles.picker} onChange={handleImageLoad} /> : null}
+      {image !== undefined ? <Menubar onCommandExecute={handleCommandExecute} /> : null}
+      {image !== undefined ? <ImagePreview canvas={processedCanvas} className={styles.preview} /> : null}
+      {image !== undefined && imageLayer !== undefined ? (
         <FloatingPanel
           title="Camadas"
           height={240}
@@ -146,21 +66,11 @@ export default function Home() {
         >
           <LayersPanel
             layers={commandLayers}
-            onReorder={(from, to) =>
-              setLayers((prev) => {
-                const commands = prev.filter((l) => l.type === "command");
-                const images = prev.filter((l) => l.type === "image");
-                const fromOrig = commands.length - 1 - from;
-                const toOrig = commands.length - 1 - to;
-                return [...images, ...reorder(commands, fromOrig, toOrig)];
-              })
-            }
-            onRemove={(id) =>
-              setLayers((prev) => remove(prev, id, "id"))
-            }
+            onReorder={handleReorder}
+            onRemove={handleRemove}
           />
         </FloatingPanel>
-      )}
+      ) : null}
     </div>
   );
 }

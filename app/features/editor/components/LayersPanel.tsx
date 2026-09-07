@@ -3,7 +3,7 @@ import {
   Trash2,
 } from "lucide-react";
 import { cn } from "@/shared/lib/utils";
-import { useDragReorder } from "@/shared/hooks";
+import { useDragReorder } from "@/shared/hooks/useDragReorder";
 import type { CommandLayer } from "@/layers/types";
 
 const styles = {
