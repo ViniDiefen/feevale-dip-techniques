@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { isImageFile, isUnderMaxSize } from "@/lib/utils";
+import { isImageFile, isUnderMaxSize } from "@/shared/lib/utils";
 
 interface UseImageUploadOptions {
   onChange?: (image: File | undefined) => void;

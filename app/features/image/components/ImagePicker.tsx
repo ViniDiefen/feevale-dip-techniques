@@ -1,7 +1,7 @@
-import { cn } from "@/lib/utils";
-import { useImageUpload } from "@/hooks/useImageUpload";
-import { useImagePicker } from "@/hooks/useImagePicker";
-import { useDragState } from "@/hooks/useDragState";
+import { cn } from "@/shared/lib/utils";
+import { useImageUpload } from "@/features/image/hooks/useImageUpload";
+import { useImagePicker } from "@/features/image/hooks/useImagePicker";
+import { useDragState } from "@/shared/hooks";
 
 const styles = {
   dropzone:
