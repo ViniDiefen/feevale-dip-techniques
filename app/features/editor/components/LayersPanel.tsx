@@ -2,8 +2,8 @@ import {
   GripVertical,
   Trash2,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { useDragReorder } from "@/hooks/useDragReorder";
+import { cn } from "@/shared/lib/utils";
+import { useDragReorder } from "@/shared/hooks";
 import type { Layer } from "@/layers/types";
 
 const styles = {

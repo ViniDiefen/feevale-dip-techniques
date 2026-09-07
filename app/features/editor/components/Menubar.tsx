@@ -6,7 +6,7 @@ import {
   MenubarSeparator,
   MenubarShortcut,
   MenubarTrigger,
-} from "@/components/ui/menubar";
+} from "@/shared/ui/menubar";
 import { menus, type Menu, type MenuEntry, type MenuItem } from "@/data/menu";
 
 const styles = {
