@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Image as ImageIcon, Trash2 } from "lucide-react";
 import { Menubar } from "@/components/Menubar";
 import type { Route } from "./+types/home";
@@ -49,6 +49,22 @@ export default function Home() {
   const [image, setImage] = useState<File>();
   const [originalCanvas, setOriginalCanvas] = useState<HTMLCanvasElement>();
   const [layers, setLayers] = useState<Layer[]>([]);
+
+  useEffect(() => {
+    if (!import.meta.env.DEV) return;
+
+    let cancelled = false;
+
+    fetch("/lena.jpg")
+      .then((res) => res.blob())
+      .then((blob) => {
+        if (cancelled) return;
+        const file = new File([blob], "lena.jpg", { type: "image/jpeg" });
+        handleImageLoad(file);
+      });
+
+    return () => { cancelled = true; };
+  }, [handleImageLoad]);
 
   const processedCanvas = useMemo(() => {
     if (!originalCanvas) return undefined;
