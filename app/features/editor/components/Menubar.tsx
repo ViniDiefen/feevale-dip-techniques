@@ -18,49 +18,73 @@ interface MenubarProps {
   onCommandExecute: (item: MenuItem) => void;
 }
 
+function MenuSeparator({ index }: { index: number }) {
+  return <MenubarSeparator key={index} />;
+}
+
+function MenuItemComponent({
+  item,
+  onCommandExecute,
+}: {
+  item: MenuItem;
+  onCommandExecute: (item: MenuItem) => void;
+}) {
+  const Icon = item.command.icon;
+  return (
+    <MenubarItem
+      key={item.command.label}
+      variant={item.variant}
+      onClick={() => onCommandExecute(item)}
+    >
+      <Icon />
+      {item.command.label}
+      {item.shortcut !== undefined ? <MenubarShortcut>{item.shortcut}</MenubarShortcut> : null}
+    </MenubarItem>
+  );
+}
+
+function MenuEntry({
+  entry,
+  onCommandExecute,
+}: {
+  entry: MenuEntry;
+  onCommandExecute: (item: MenuItem) => void;
+}) {
+  if (entry.type === "separator") {
+    return <MenuSeparator index={0} />;
+  }
+  return <MenuItemComponent item={entry} onCommandExecute={onCommandExecute} />;
+}
+
+function Menu({
+  menu,
+  onCommandExecute,
+}: {
+  menu: Menu;
+  onCommandExecute: (item: MenuItem) => void;
+}) {
+  return (
+    <MenubarMenu key={menu.label}>
+      <MenubarTrigger className={styles.trigger}>{menu.label}</MenubarTrigger>
+      <MenubarContent>
+        {menu.items.map((entry, index) => (
+          <MenuEntry
+            key={index}
+            entry={entry}
+            onCommandExecute={onCommandExecute}
+          />
+        ))}
+      </MenubarContent>
+    </MenubarMenu>
+  );
+}
+
 export function Menubar({ onCommandExecute }: MenubarProps) {
-  function renderMenu(menu: Menu) {
-    return (
-      <MenubarMenu key={menu.label}>
-        <MenubarTrigger className={styles.trigger}>{menu.label}</MenubarTrigger>
-        <MenubarContent>
-          {menu.items.map(renderMenuEntry)}
-        </MenubarContent>
-      </MenubarMenu>
-    );
-  }
-
-  function renderMenuEntry(item: MenuEntry, index: number) {
-    switch (item.type) {
-      case "separator":
-        return renderMenuSeparator(index);
-      case "item":
-        return renderMenuItem(item);
-    }
-  }
-
-  function renderMenuSeparator(index: number) {
-    return <MenubarSeparator key={index} />;
-  }
-
-  function renderMenuItem(item: MenuItem) {
-    const Icon = item.command.icon;
-    return (
-      <MenubarItem
-        key={item.command.label}
-        variant={item.variant}
-        onClick={() => onCommandExecute(item)}
-      >
-        <Icon />
-        {item.command.label}
-        {item.shortcut && <MenubarShortcut>{item.shortcut}</MenubarShortcut>}
-      </MenubarItem>
-    );
-  }
-
   return (
     <MenubarUI className={styles.menubar}>
-      {menus.map(renderMenu)}
+      {menus.map((menu) => (
+        <Menu key={menu.label} menu={menu} onCommandExecute={onCommandExecute} />
+      ))}
     </MenubarUI>
   );
 }
