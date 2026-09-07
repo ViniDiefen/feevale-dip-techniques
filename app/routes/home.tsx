@@ -1,14 +1,14 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Image as ImageIcon, Trash2 } from "lucide-react";
-import { Menubar } from "@/components/Menubar";
+import { Menubar } from "@/features/editor";
 import type { Route } from "./+types/home";
-import { ImagePicker } from "@/components/ImagePicker";
-import { ImagePreview } from "@/components/ImagePreview";
-import { FloatingPanel } from "@/components/FloatingPanel";
-import { LayersPanel } from "@/components/LayersPanel";
+import { ImagePicker } from "@/features/image";
+import { ImagePreview } from "@/features/editor";
+import { FloatingPanel } from "@/features/editor";
+import { LayersPanel } from "@/features/editor";
 import type { Layer } from "@/layers/types";
 import type { MenuItem } from "@/data/menu";
-import { reorder, remove } from "@/lib/utils";
+import { reorder, remove } from "@/shared/lib/utils";
 
 const styles = {
   layout: "flex flex-col h-screen",
@@ -50,27 +50,6 @@ export default function Home() {
   const [originalCanvas, setOriginalCanvas] = useState<HTMLCanvasElement>();
   const [layers, setLayers] = useState<Layer[]>([]);
 
-  useEffect(() => {
-    if (!import.meta.env.DEV) return;
-
-    let cancelled = false;
-
-    fetch("/lena.jpg")
-      .then((res) => res.blob())
-      .then((blob) => {
-        if (cancelled) return;
-        const file = new File([blob], "lena.jpg", { type: "image/jpeg" });
-        handleImageLoad(file);
-      });
-
-    return () => { cancelled = true; };
-  }, [handleImageLoad]);
-
-  const processedCanvas = useMemo(() => {
-    if (!originalCanvas) return undefined;
-    return applyLayers(originalCanvas, layers);
-  }, [originalCanvas, layers]);
-
   const handleImageLoad = useCallback((file: File | undefined) => {
     if (!file) return;
     setImage(file);
@@ -91,6 +70,27 @@ export default function Home() {
     };
     img.src = URL.createObjectURL(file);
   }, []);
+
+  useEffect(() => {
+    if (!import.meta.env.DEV) return;
+
+    let cancelled = false;
+
+    fetch("/lena.jpg")
+      .then((res) => res.blob())
+      .then((blob) => {
+        if (cancelled) return;
+        const file = new File([blob], "lena.jpg", { type: "image/jpeg" });
+        handleImageLoad(file);
+      });
+
+    return () => { cancelled = true; };
+  }, [handleImageLoad]);
+
+  const processedCanvas = useMemo(() => {
+    if (!originalCanvas) return undefined;
+    return applyLayers(originalCanvas, layers);
+  }, [originalCanvas, layers]);
 
   const handleImageRemove = useCallback(() => {
     setImage(undefined);
