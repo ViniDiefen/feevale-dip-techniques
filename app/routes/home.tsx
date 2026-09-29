@@ -5,15 +5,6 @@ import Draggable from "react-draggable";
 import { ErrorCode, useDropzone, type FileRejection } from "react-dropzone";
 import { DragDropProvider, type DragEndEvent } from "@dnd-kit/react";
 import { isSortable, useSortable } from "@dnd-kit/react/sortable";
-import {
-  Menubar as MenubarUI,
-  MenubarContent,
-  MenubarItem,
-  MenubarMenu,
-  MenubarSeparator,
-  MenubarShortcut,
-  MenubarTrigger,
-} from "@/components/ui/menubar";
 import type { NumberParamSchema, SelectParamSchema } from "@/commands/types";
 import { menus, type Menu, type MenuItem } from "@/data/menu";
 import type { CommandLayer, Layer } from "@/layers/types";
@@ -29,8 +20,9 @@ import {
   updateLayerParams,
 } from "@/layers/layers";
 import { fileToCanvas, loadSampleImage } from "@/lib/image";
-import { cn } from "@/lib/utils";
 import type { Route } from "./+types/home";
+
+const MENUS_NAME = "editor-menus";
 
 const MAX_IMAGE_SIZE_MB = 5;
 const PANEL_WIDTH = 288;
@@ -48,8 +40,20 @@ const styles = {
     "rounded-md border border-border bg-secondary px-3 py-1.5 text-sm text-secondary-foreground shadow-sm transition-all hover:bg-accent hover:text-accent-foreground hover:shadow-md active:scale-95",
   placeholder: "text-sm text-muted-foreground",
   uploadError: "text-xs text-destructive",
-  menubar: "w-full rounded-none border-x-0 border-t-0 h-12",
-  menuTrigger: "h-10 px-3",
+  menubar: "flex w-full h-12 items-center gap-0.5 border-b border-border",
+  menu: "group relative [&[open]>summary]:bg-muted",
+  menuTrigger:
+    "flex h-10 list-none items-center rounded-sm px-3 text-sm font-medium select-none outline-none hover:bg-muted [&::-webkit-details-marker]:hidden",
+  menuContent:
+    "absolute left-0 top-full z-50 mt-1 min-w-36 rounded-lg bg-popover p-1 text-popover-foreground shadow-md ring-1 ring-foreground/10",
+  menuItem:
+    "relative flex w-full cursor-default items-center gap-1.5 rounded-md px-1.5 py-1 text-sm select-none outline-none [&_svg]:size-4",
+  menuItemHover:
+    "hover:bg-accent hover:text-accent-foreground focus-visible:bg-accent focus-visible:text-accent-foreground",
+  menuItemDestructive:
+    "text-destructive hover:bg-destructive/10 hover:text-destructive focus-visible:bg-destructive/10 focus-visible:text-destructive",
+  menuSeparator: "-mx-1 my-1 h-px bg-border",
+  menuShortcut: "ml-auto text-xs tracking-widest text-muted-foreground",
   preview:
     "relative flex items-center justify-center overflow-auto rounded-lg bg-background flex-1 min-h-0 p-5",
   previewImage: "object-contain",
@@ -159,7 +163,7 @@ function FloatingPanel({
         className={styles.panel}
         style={{ left: 0, top: 0, width: PANEL_WIDTH, height }}
       >
-        <div className={cn("panel-handle", styles.panelHeader)}>
+        <div className={`panel-handle ${styles.panelHeader}`}>
           <span className={styles.panelTitle}>{title}</span>
         </div>
         <div className={styles.panelBody}>{children}</div>
@@ -188,11 +192,9 @@ function LayerRow({
   return (
     <li
       ref={ref}
-      className={cn(
-        styles.item,
-        isDragging && styles.itemDragging,
-        selected && styles.itemSelected
-      )}
+      className={`${styles.item} ${isDragging ? styles.itemDragging : ""} ${
+        selected ? styles.itemSelected : ""
+      }`}
       onClick={() => onSelect(layer.id)}
     >
       <GripVertical size={14} className={styles.dragHandle} />
@@ -213,6 +215,11 @@ function LayerRow({
   );
 }
 
+function closeMenu(element: Element | null) {
+  const menu = element?.closest("details");
+  if (menu instanceof HTMLDetailsElement) menu.open = false;
+}
+
 function CommandMenuItem({
   item,
   onCommandExecute,
@@ -221,15 +228,26 @@ function CommandMenuItem({
   onCommandExecute: (item: MenuItem) => void;
 }) {
   const Icon = item.command.icon;
+  const className =
+    item.variant === "destructive"
+      ? `${styles.menuItem} ${styles.menuItemDestructive}`
+      : `${styles.menuItem} ${styles.menuItemHover}`;
 
   return (
-    <MenubarItem variant={item.variant} onClick={() => onCommandExecute(item)}>
+    <button
+      type="button"
+      className={className}
+      onClick={(event) => {
+        closeMenu(event.currentTarget);
+        onCommandExecute(item);
+      }}
+    >
       <Icon />
       {item.command.label}
       {item.shortcut !== undefined ? (
-        <MenubarShortcut>{item.shortcut}</MenubarShortcut>
+        <span className={styles.menuShortcut}>{item.shortcut}</span>
       ) : null}
-    </MenubarItem>
+    </button>
   );
 }
 
@@ -241,12 +259,12 @@ function CommandMenu({
   onCommandExecute: (item: MenuItem) => void;
 }) {
   return (
-    <MenubarMenu>
-      <MenubarTrigger className={styles.menuTrigger}>{menu.label}</MenubarTrigger>
-      <MenubarContent>
+    <details name={MENUS_NAME} className={styles.menu}>
+      <summary className={styles.menuTrigger}>{menu.label}</summary>
+      <div className={styles.menuContent}>
         {menu.items.map((entry, index) =>
           entry.type === "separator" ? (
-            <MenubarSeparator key={index} />
+            <div key={index} aria-hidden="true" className={styles.menuSeparator} />
           ) : (
             <CommandMenuItem
               key={entry.command.label}
@@ -255,8 +273,8 @@ function CommandMenu({
             />
           )
         )}
-      </MenubarContent>
-    </MenubarMenu>
+      </div>
+    </details>
   );
 }
 
@@ -358,6 +376,28 @@ export default function Home() {
     };
   }, [handleImageLoad]);
 
+  useEffect(() => {
+    const selector = `details[name="${MENUS_NAME}"]`;
+    const closeMenus = () => {
+      document.querySelectorAll<HTMLDetailsElement>(`${selector}[open]`).forEach((menu) => {
+        menu.open = false;
+      });
+    };
+    const handlePointerDown = (event: PointerEvent) => {
+      if (event.target instanceof Element && event.target.closest(selector)) return;
+      closeMenus();
+    };
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") closeMenus();
+    };
+    document.addEventListener("pointerdown", handlePointerDown);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("pointerdown", handlePointerDown);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
+
   const handleDrop = useCallback(
     (accepted: File[]) => {
       handleImageLoad(accepted[0]);
@@ -449,11 +489,9 @@ export default function Home() {
       {image === undefined ? (
         <div
           {...getRootProps({
-            className: cn(
-              styles.dropzone,
-              styles.picker,
-              isDragActive && styles.dropzoneDragging
-            ),
+            className: `${styles.dropzone} ${styles.picker} ${
+              isDragActive ? styles.dropzoneDragging : ""
+            }`,
           })}
         >
           <input {...getInputProps()} />
@@ -474,7 +512,7 @@ export default function Home() {
       ) : null}
 
       {image !== undefined ? (
-        <MenubarUI className={styles.menubar}>
+        <nav className={styles.menubar} aria-label="Menus de edição">
           {menus.map((menu) => (
             <CommandMenu
               key={menu.label}
@@ -482,7 +520,7 @@ export default function Home() {
               onCommandExecute={handleCommandExecute}
             />
           ))}
-        </MenubarUI>
+        </nav>
       ) : null}
 
       {image !== undefined ? (
