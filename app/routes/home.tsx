@@ -417,11 +417,25 @@ export default function Home() {
     handleLayerReorder(initialIndex, index);
   }, [handleLayerReorder]);
 
-  const processedCanvas = useMemo(
-    () => (originalCanvas ? applyLayers(originalCanvas, layers) : undefined),
-    [originalCanvas, layers]
-  );
-  const previewSrc = useMemo(() => processedCanvas?.toDataURL(), [processedCanvas]);
+  const [processedCanvas, setProcessedCanvas] = useState<HTMLCanvasElement>();
+  useEffect(() => {
+    if (!originalCanvas) {
+      setProcessedCanvas(undefined);
+      return;
+    }
+    const frame = requestAnimationFrame(() =>
+      setProcessedCanvas(applyLayers(originalCanvas, layers))
+    );
+    return () => cancelAnimationFrame(frame);
+  }, [originalCanvas, layers]);
+  const previewRef = useRef<HTMLCanvasElement>(null);
+  useEffect(() => {
+    const canvas = previewRef.current;
+    if (!canvas || !processedCanvas) return;
+    canvas.width = processedCanvas.width;
+    canvas.height = processedCanvas.height;
+    canvas.getContext("2d")?.drawImage(processedCanvas, 0, 0);
+  }, [processedCanvas]);
   const commandLayers = useMemo(() => listCommandLayers(layers), [layers]);
   const imageLayer = useMemo(() => getImageLayer(layers), [layers]);
   const selectedLayer = useMemo(
@@ -473,8 +487,13 @@ export default function Home() {
 
       {image !== undefined ? (
         <div className={styles.preview}>
-          {previewSrc !== undefined ? (
-            <img src={previewSrc} className={styles.previewImage} alt="Preview" />
+          {processedCanvas !== undefined ? (
+            <canvas
+              ref={previewRef}
+              className={styles.previewImage}
+              role="img"
+              aria-label="Preview"
+            />
           ) : null}
         </div>
       ) : null}
