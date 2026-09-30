@@ -6,6 +6,10 @@ import { MirrorCommand } from "@/commands/transforms/mirror";
 import { GrayscaleCommand } from "@/commands/filters/grayscale";
 import { BrightnessCommand } from "@/commands/filters/brightness";
 import { ContrastCommand } from "@/commands/filters/contrast";
+import { MediaCommand } from "@/commands/passa-baixas/media";
+import { ModaCommand } from "@/commands/passa-baixas/moda";
+import { RobertsCommand } from "@/commands/passa-altas/roberts";
+import { SobelCommand } from "@/commands/passa-altas/sobel";
 
 export type MenuItem = {
   type: "item";
@@ -41,6 +45,20 @@ export const menus: Menu[] = [
       { type: "item", command: new GrayscaleCommand() },
       { type: "item", command: new BrightnessCommand() },
       { type: "item", command: new ContrastCommand() },
+    ],
+  },
+  {
+    label: "Passa-baixas",
+    items: [
+      { type: "item", command: new MediaCommand() },
+      { type: "item", command: new ModaCommand() },
+    ],
+  },
+  {
+    label: "Passa-altas",
+    items: [
+      { type: "item", command: new RobertsCommand() },
+      { type: "item", command: new SobelCommand() },
     ],
   },
 ];
