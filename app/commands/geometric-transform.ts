@@ -1,18 +1,19 @@
-export type Matrix3x3 = [
+// Affine transformation matrix in homogeneous coordinates.
+export type AffineMatrix = [
   [number, number, number],
   [number, number, number],
   [number, number, number]
 ];
 
-// Geometric transform: moves the tone of the pixel at (xo, yo) in the source image
-// to position (xd, yd) in the destination image:
+// Geometric transform by forward mapping: moves the tone of the pixel at
+// (xo, yo) in the source image to position (xd, yd) in the destination image:
 //
 //   [xd]   [a b c]   [xo]
 //   [yd] = [d e f] . [yo]
 //   [1 ]   [0 0 1]   [1 ]
 //
 // Pixels that land outside the destination image are discarded.
-export function applyMatrix(source: HTMLCanvasElement, matrix: Matrix3x3): HTMLCanvasElement {
+export function affineTransform(source: HTMLCanvasElement, matrix: AffineMatrix): HTMLCanvasElement {
   const { width, height } = source;
   const canvas = document.createElement("canvas");
   canvas.width = width;

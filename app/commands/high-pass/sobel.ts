@@ -1,6 +1,6 @@
 import { FocusIcon } from "lucide-react";
 import type { Command } from "../types";
-import { detectEdges } from "./edges";
+import { gradientEdgeDetection } from "../edge-detection";
 
 const MASK_X = [
   [-1, 0, 1],
@@ -33,6 +33,6 @@ export class SobelCommand implements Command<SobelParams> {
   defaultParams: SobelParams = { threshold: 50 };
 
   execute(image: HTMLCanvasElement, params: SobelParams): HTMLCanvasElement {
-    return detectEdges(image, MASK_X, MASK_Y, params.threshold);
+    return gradientEdgeDetection(image, MASK_X, MASK_Y, params.threshold);
   }
 }

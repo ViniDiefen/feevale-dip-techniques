@@ -1,6 +1,6 @@
 import { BlendIcon } from "lucide-react";
 import type { Command } from "../types";
-import { processPixels } from "../pixels";
+import { pointOperation } from "../point-operation";
 
 // Weights follow the course slides ("Transformações Grayscale").
 // The slides divide the weighted formulas by 3, but their weights
@@ -27,7 +27,7 @@ export class GrayscaleCommand implements Command<GrayscaleParams> {
   defaultParams: GrayscaleParams = { method: "average" };
 
   execute(image: HTMLCanvasElement, params: GrayscaleParams): HTMLCanvasElement {
-    return processPixels(image, (r, g, b, a) => {
+    return pointOperation(image, (r, g, b, a) => {
       let gray: number;
       switch (params.method) {
         case "bt709":

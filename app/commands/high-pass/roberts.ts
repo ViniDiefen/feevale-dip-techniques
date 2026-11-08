@@ -1,6 +1,6 @@
 import { ScanIcon } from "lucide-react";
 import type { Command } from "../types";
-import { detectEdges } from "./edges";
+import { gradientEdgeDetection } from "../edge-detection";
 
 // G1 = f(x,y) − f(x+1,y+1)
 const MASK_G1 = [
@@ -33,6 +33,6 @@ export class RobertsCommand implements Command<RobertsParams> {
   defaultParams: RobertsParams = { threshold: 50 };
 
   execute(image: HTMLCanvasElement, params: RobertsParams): HTMLCanvasElement {
-    return detectEdges(image, MASK_G1, MASK_G2, params.threshold);
+    return gradientEdgeDetection(image, MASK_G1, MASK_G2, params.threshold);
   }
 }

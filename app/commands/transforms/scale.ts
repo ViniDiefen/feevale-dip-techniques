@@ -1,12 +1,12 @@
 import { ScalingIcon } from "lucide-react";
 import type { Command } from "../types";
-import { applyMatrix, type Matrix3x3 } from "../geometric";
+import { affineTransform, type AffineMatrix } from "../geometric-transform";
 
 export interface ScaleParams {
   factor: number;
 }
 
-function scaleMatrix(sx: number, sy: number): Matrix3x3 {
+function scaleMatrix(sx: number, sy: number): AffineMatrix {
   return [
     [sx, 0, 0],
     [0, sy, 0],
@@ -31,6 +31,6 @@ export class ScaleCommand implements Command<ScaleParams> {
 
   execute(image: HTMLCanvasElement, params: ScaleParams): HTMLCanvasElement {
     const matrix = scaleMatrix(params.factor, params.factor);
-    return applyMatrix(image, matrix);
+    return affineTransform(image, matrix);
   }
 }

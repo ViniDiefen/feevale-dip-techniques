@@ -1,6 +1,6 @@
 import { FlipHorizontalIcon } from "lucide-react";
 import type { Command } from "../types";
-import { applyMatrix, type Matrix3x3 } from "../geometric";
+import { affineTransform, type AffineMatrix } from "../geometric-transform";
 
 export interface MirrorParams {
   direction: "horizontal" | "vertical";
@@ -9,7 +9,7 @@ export interface MirrorParams {
 // Slide matrix with -1 on the diagonal. The -1 alone would move the image
 // to negative coordinates (off screen), so we add a translation of
 // (width - 1) or (height - 1) to bring it back.
-function mirrorMatrix(direction: "horizontal" | "vertical", width: number, height: number): Matrix3x3 {
+function mirrorMatrix(direction: "horizontal" | "vertical", width: number, height: number): AffineMatrix {
   if (direction === "horizontal") {
     return [
       [-1, 0, width - 1],
@@ -42,6 +42,6 @@ export class MirrorCommand implements Command<MirrorParams> {
 
   execute(image: HTMLCanvasElement, params: MirrorParams): HTMLCanvasElement {
     const matrix = mirrorMatrix(params.direction, image.width, image.height);
-    return applyMatrix(image, matrix);
+    return affineTransform(image, matrix);
   }
 }

@@ -38,14 +38,14 @@ app/
 │   └── layers.ts             pure functions to create, apply, move and remove layers
 ├── commands/                 the DIP techniques
 │   ├── types.ts              Command interface and parameter schemas
-│   ├── pixels.ts             point operations: each pixel depends only on itself
-│   ├── convolution.ts        local operations: each pixel depends on its neighborhood
-│   ├── geometric.ts          geometric transforms with a 3×3 matrix
+│   ├── point-operation.ts    point operations: each pixel depends only on itself
+│   ├── local-operation.ts    local operations: each pixel depends on its neighborhood
+│   ├── geometric-transform.ts  affine transforms with a 3×3 matrix
+│   ├── edge-detection.ts     gradient edge detection shared by Roberts and Sobel
 │   ├── transforms/           translation, scale, rotation, mirror
 │   ├── filters/              grayscale, brightness, contrast
 │   ├── low-pass/             mean, mode
 │   └── high-pass/            edge detectors (Roberts, Sobel)
-│       └── edges.ts          shared gradient edge detector
 ├── data/menu.ts              menus and the commands in each one
 ├── components/
 │   ├── Menubar.tsx           top menus; clicking a command adds a layer
@@ -65,7 +65,7 @@ public/
 1. Each technique is a class that implements `Command`: a `label`, an `icon`, the `params` it shows in the panel, its `defaultParams` and an `execute(image, params)` method that takes a canvas and returns a new one.
 2. Picking a technique in the menu creates a layer with that command and its default parameters.
 3. Whenever the layers change, `applyLayers` starts from the original image and runs every layer, from the oldest to the newest. The original image is never modified.
-4. Most commands don't loop over pixels themselves. They pass a formula, a mask or a matrix to `processPixels`, `filterImage` or `applyMatrix`.
+4. Most commands don't loop over pixels themselves. They pass a formula, a mask or a matrix to `pointOperation`, `localOperation` or `affineTransform`.
 
 ## Adding a technique
 

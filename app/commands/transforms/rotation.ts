@@ -1,12 +1,12 @@
 import { RotateCwIcon } from "lucide-react";
 import type { Command } from "../types";
-import { applyMatrix, type Matrix3x3 } from "../geometric";
+import { affineTransform, type AffineMatrix } from "../geometric-transform";
 
 export interface RotationParams {
   degrees: number;
 }
 
-function rotationMatrix(degrees: number): Matrix3x3 {
+function rotationMatrix(degrees: number): AffineMatrix {
   const radians = (degrees * Math.PI) / 180;
   const cos = Math.cos(radians);
   const sin = Math.sin(radians);
@@ -35,6 +35,6 @@ export class RotationCommand implements Command<RotationParams> {
 
   execute(image: HTMLCanvasElement, params: RotationParams): HTMLCanvasElement {
     const matrix = rotationMatrix(params.degrees);
-    return applyMatrix(image, matrix);
+    return affineTransform(image, matrix);
   }
 }

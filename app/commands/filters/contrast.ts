@@ -1,6 +1,6 @@
 import { ContrastIcon } from "lucide-react";
 import type { Command } from "../types";
-import { processPixels } from "../pixels";
+import { pointOperation } from "../point-operation";
 
 export interface ContrastParams {
   factor: number;
@@ -24,6 +24,6 @@ export class ContrastCommand implements Command<ContrastParams> {
   execute(image: HTMLCanvasElement, params: ContrastParams): HTMLCanvasElement {
     // D(x,y) = C * f(x,y)
     const c = params.factor;
-    return processPixels(image, (r, g, b, a) => [c * r, c * g, c * b, a]);
+    return pointOperation(image, (r, g, b, a) => [c * r, c * g, c * b, a]);
   }
 }

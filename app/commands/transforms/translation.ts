@@ -1,13 +1,13 @@
 import { MoveIcon } from "lucide-react";
 import type { Command } from "../types";
-import { applyMatrix, type Matrix3x3 } from "../geometric";
+import { affineTransform, type AffineMatrix } from "../geometric-transform";
 
 export interface TranslationParams {
   dx: number;
   dy: number;
 }
 
-function translationMatrix(dx: number, dy: number): Matrix3x3 {
+function translationMatrix(dx: number, dy: number): AffineMatrix {
   return [
     [1, 0, dx],
     [0, 1, dy],
@@ -40,6 +40,6 @@ export class TranslationCommand implements Command<TranslationParams> {
 
   execute(image: HTMLCanvasElement, params: TranslationParams): HTMLCanvasElement {
     const matrix = translationMatrix(params.dx, params.dy);
-    return applyMatrix(image, matrix);
+    return affineTransform(image, matrix);
   }
 }

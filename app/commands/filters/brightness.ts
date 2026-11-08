@@ -1,6 +1,6 @@
 import { SunIcon } from "lucide-react";
 import type { Command } from "../types";
-import { processPixels } from "../pixels";
+import { pointOperation } from "../point-operation";
 
 export interface BrightnessParams {
   amount: number;
@@ -23,7 +23,7 @@ export class BrightnessCommand implements Command<BrightnessParams> {
 
   execute(image: HTMLCanvasElement, params: BrightnessParams): HTMLCanvasElement {
     // D(x,y) = f(x,y) + B
-    return processPixels(image, (r, g, b, a) => [
+    return pointOperation(image, (r, g, b, a) => [
       r + params.amount,
       g + params.amount,
       b + params.amount,

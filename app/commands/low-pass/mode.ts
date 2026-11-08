@@ -1,6 +1,6 @@
 import { ChartBarIcon } from "lucide-react";
 import type { Command } from "../types";
-import { filterImage, neighborhood } from "../convolution";
+import { localOperation, neighborhood } from "../local-operation";
 
 export interface ModeParams {
   size: "3" | "5" | "7";
@@ -39,6 +39,6 @@ export class ModeCommand implements Command<ModeParams> {
 
   execute(image: HTMLCanvasElement, params: ModeParams): HTMLCanvasElement {
     const size = Number(params.size);
-    return filterImage(image, size, (pixels, x, y, c) => mode(neighborhood(pixels, size, x, y, c)));
+    return localOperation(image, size, (src, x, y, channel) => mode(neighborhood(src, size, x, y, channel)));
   }
 }
