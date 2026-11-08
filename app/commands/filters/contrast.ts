@@ -1,12 +1,12 @@
 import { ContrastIcon } from "lucide-react";
-import { BaseCommand } from "../base";
+import type { Command } from "../types";
 import { processPixels, clamp } from "../pixels";
 
 export interface ContrastParams {
   factor: number;
 }
 
-export class ContrastCommand extends BaseCommand<ContrastParams> {
+export class ContrastCommand implements Command<ContrastParams> {
   label = "Contraste";
   icon = ContrastIcon;
   params = [

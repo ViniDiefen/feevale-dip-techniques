@@ -1,5 +1,5 @@
 import { ScalingIcon } from "lucide-react";
-import { BaseCommand } from "../base";
+import type { Command } from "../types";
 import { applyMatrix, type Matrix3x3 } from "../matrix";
 
 export interface ScaleParams {
@@ -14,7 +14,7 @@ function scaleMatrix(sx: number, sy: number): Matrix3x3 {
   ];
 }
 
-export class ScaleCommand extends BaseCommand<ScaleParams> {
+export class ScaleCommand implements Command<ScaleParams> {
   label = "Escala";
   icon = ScalingIcon;
   params = [

@@ -1,5 +1,5 @@
 import { FlipHorizontalIcon } from "lucide-react";
-import { BaseCommand } from "../base";
+import type { Command } from "../types";
 import { applyMatrix, type Matrix3x3 } from "../matrix";
 
 export interface MirrorParams {
@@ -21,7 +21,7 @@ function mirrorMatrix(direction: "horizontal" | "vertical", width: number, heigh
   ];
 }
 
-export class MirrorCommand extends BaseCommand<MirrorParams> {
+export class MirrorCommand implements Command<MirrorParams> {
   label = "Espelhamento";
   icon = FlipHorizontalIcon;
   params = [

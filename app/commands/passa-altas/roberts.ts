@@ -1,5 +1,5 @@
 import { ScanIcon } from "lucide-react";
-import { BaseCommand } from "../base";
+import type { Command } from "../types";
 import { GrayscaleCommand } from "../filters/grayscale";
 import { applyConvolutionMagnitude } from "../matrix";
 
@@ -16,7 +16,7 @@ export interface RobertsParams {
   threshold: number;
 }
 
-export class RobertsCommand extends BaseCommand<RobertsParams> {
+export class RobertsCommand implements Command<RobertsParams> {
   label = "Roberts";
   icon = ScanIcon;
   params = [

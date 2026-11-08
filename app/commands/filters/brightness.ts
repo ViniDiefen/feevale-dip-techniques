@@ -1,12 +1,12 @@
 import { SunIcon } from "lucide-react";
-import { BaseCommand } from "../base";
+import type { Command } from "../types";
 import { processPixels, clamp } from "../pixels";
 
 export interface BrightnessParams {
   amount: number;
 }
 
-export class BrightnessCommand extends BaseCommand<BrightnessParams> {
+export class BrightnessCommand implements Command<BrightnessParams> {
   label = "Brilho";
   icon = SunIcon;
   params = [

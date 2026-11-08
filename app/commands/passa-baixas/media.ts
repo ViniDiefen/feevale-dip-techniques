@@ -1,5 +1,5 @@
 import { Grid3x3Icon } from "lucide-react";
-import { BaseCommand } from "../base";
+import type { Command } from "../types";
 import { applyConvolutionMagnitude } from "../matrix";
 
 export interface MediaParams {
@@ -19,7 +19,7 @@ const MEAN_KERNELS: Record<MediaParams["size"], number[][]> = {
   "7": meanKernel(7),
 };
 
-export class MediaCommand extends BaseCommand<MediaParams> {
+export class MediaCommand implements Command<MediaParams> {
   label = "Média";
   icon = Grid3x3Icon;
   params = [

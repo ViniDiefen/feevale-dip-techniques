@@ -1,5 +1,5 @@
 import { MoveIcon } from "lucide-react";
-import { BaseCommand } from "../base";
+import type { Command } from "../types";
 import { applyMatrix, type Matrix3x3 } from "../matrix";
 
 export interface TranslationParams {
@@ -15,7 +15,7 @@ function translationMatrix(dx: number, dy: number): Matrix3x3 {
   ];
 }
 
-export class TranslationCommand extends BaseCommand<TranslationParams> {
+export class TranslationCommand implements Command<TranslationParams> {
   label = "Translação";
   icon = MoveIcon;
   params = [

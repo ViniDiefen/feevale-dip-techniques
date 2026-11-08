@@ -1,5 +1,5 @@
 import { FocusIcon } from "lucide-react";
-import { BaseCommand } from "../base";
+import type { Command } from "../types";
 import { GrayscaleCommand } from "../filters/grayscale";
 import { applyConvolutionMagnitude } from "../matrix";
 
@@ -18,7 +18,7 @@ export interface SobelParams {
   threshold: number;
 }
 
-export class SobelCommand extends BaseCommand<SobelParams> {
+export class SobelCommand implements Command<SobelParams> {
   label = "Sobel";
   icon = FocusIcon;
   params = [

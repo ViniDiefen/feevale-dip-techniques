@@ -1,5 +1,5 @@
 import { RotateCwIcon } from "lucide-react";
-import { BaseCommand } from "../base";
+import type { Command } from "../types";
 import { applyMatrix, type Matrix3x3 } from "../matrix";
 
 export interface RotationParams {
@@ -18,7 +18,7 @@ function rotationMatrix(degrees: number): Matrix3x3 {
   ];
 }
 
-export class RotationCommand extends BaseCommand<RotationParams> {
+export class RotationCommand implements Command<RotationParams> {
   label = "Rotação";
   icon = RotateCwIcon;
   params = [

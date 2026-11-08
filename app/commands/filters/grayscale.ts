@@ -1,12 +1,12 @@
 import { BlendIcon } from "lucide-react";
-import { BaseCommand } from "../base";
+import type { Command } from "../types";
 import { processPixels } from "../pixels";
 
 export interface GrayscaleParams {
   method: "luminosity" | "average" | "desaturation";
 }
 
-export class GrayscaleCommand extends BaseCommand<GrayscaleParams> {
+export class GrayscaleCommand implements Command<GrayscaleParams> {
   label = "Escala de cinza";
   icon = BlendIcon;
   params = [

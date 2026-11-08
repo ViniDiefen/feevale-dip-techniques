@@ -1,5 +1,5 @@
 import { ChartBarIcon } from "lucide-react";
-import { BaseCommand } from "../base";
+import type { Command } from "../types";
 import { mapNeighborhood } from "../matrix";
 
 export interface ModaParams {
@@ -49,7 +49,7 @@ function createModeVisit(size: number) {
   };
 }
 
-export class ModaCommand extends BaseCommand<ModaParams> {
+export class ModaCommand implements Command<ModaParams> {
   label = "Moda";
   icon = ChartBarIcon;
   params = [
