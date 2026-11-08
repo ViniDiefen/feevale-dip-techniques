@@ -11,54 +11,41 @@ import { ModaCommand } from "@/commands/passa-baixas/moda";
 import { RobertsCommand } from "@/commands/passa-altas/roberts";
 import { SobelCommand } from "@/commands/passa-altas/sobel";
 
-export type MenuItem = {
-  type: "item";
-  command: Command<any>;
-  shortcut?: string;
-  variant?: "default" | "destructive";
-};
-
-export type MenuSeparator = {
-  type: "separator";
-};
-
-export type MenuEntry = MenuItem | MenuSeparator;
-
 export type Menu = {
   label: string;
-  items: MenuEntry[];
+  commands: Command<any>[];
 };
 
 export const menus: Menu[] = [
   {
     label: "Transformações Geométricas",
-    items: [
-      { type: "item", command: new TranslationCommand() },
-      { type: "item", command: new ScaleCommand() },
-      { type: "item", command: new RotationCommand() },
-      { type: "item", command: new MirrorCommand() },
+    commands: [
+      new TranslationCommand(),
+      new ScaleCommand(),
+      new RotationCommand(),
+      new MirrorCommand(),
     ],
   },
   {
     label: "Filtros",
-    items: [
-      { type: "item", command: new GrayscaleCommand() },
-      { type: "item", command: new BrightnessCommand() },
-      { type: "item", command: new ContrastCommand() },
+    commands: [
+      new GrayscaleCommand(),
+      new BrightnessCommand(),
+      new ContrastCommand(),
     ],
   },
   {
     label: "Passa-baixas",
-    items: [
-      { type: "item", command: new MediaCommand() },
-      { type: "item", command: new ModaCommand() },
+    commands: [
+      new MediaCommand(),
+      new ModaCommand(),
     ],
   },
   {
     label: "Passa-altas",
-    items: [
-      { type: "item", command: new RobertsCommand() },
-      { type: "item", command: new SobelCommand() },
+    commands: [
+      new RobertsCommand(),
+      new SobelCommand(),
     ],
   },
 ];

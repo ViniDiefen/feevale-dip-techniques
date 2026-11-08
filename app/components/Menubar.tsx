@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import type { Command } from "@/commands/types";
-import { menus, type Menu, type MenuItem } from "@/data/menu";
+import { menus, type Menu } from "@/data/menu";
 
 const MENUS_NAME = "editor-menus";
 
@@ -12,13 +12,7 @@ const styles = {
   menuContent:
     "absolute left-0 top-full z-50 mt-1 min-w-36 rounded-lg bg-popover p-1 text-popover-foreground shadow-md ring-1 ring-foreground/10",
   menuItem:
-    "relative flex w-full cursor-default items-center gap-1.5 rounded-md px-1.5 py-1 text-sm select-none outline-none [&_svg]:size-4",
-  menuItemHover:
-    "hover:bg-accent hover:text-accent-foreground focus-visible:bg-accent focus-visible:text-accent-foreground",
-  menuItemDestructive:
-    "text-destructive hover:bg-destructive/10 hover:text-destructive focus-visible:bg-destructive/10 focus-visible:text-destructive",
-  menuSeparator: "-mx-1 my-1 h-px bg-border",
-  menuShortcut: "ml-auto text-xs tracking-widest text-muted-foreground",
+    "relative flex w-full cursor-default items-center gap-1.5 rounded-md px-1.5 py-1 text-sm select-none outline-none [&_svg]:size-4 hover:bg-accent hover:text-accent-foreground focus-visible:bg-accent focus-visible:text-accent-foreground",
 } as const;
 
 function closeMenu(element: Element | null) {
@@ -27,32 +21,25 @@ function closeMenu(element: Element | null) {
 }
 
 function CommandMenuItem({
-  item,
+  command,
   onCommandExecute,
 }: {
-  item: MenuItem;
+  command: Command<any>;
   onCommandExecute: (command: Command<any>) => void;
 }) {
-  const Icon = item.command.icon;
-  const className =
-    item.variant === "destructive"
-      ? `${styles.menuItem} ${styles.menuItemDestructive}`
-      : `${styles.menuItem} ${styles.menuItemHover}`;
+  const Icon = command.icon;
 
   return (
     <button
       type="button"
-      className={className}
+      className={styles.menuItem}
       onClick={(event) => {
         closeMenu(event.currentTarget);
-        onCommandExecute(item.command);
+        onCommandExecute(command);
       }}
     >
       <Icon />
-      {item.command.label}
-      {item.shortcut !== undefined ? (
-        <span className={styles.menuShortcut}>{item.shortcut}</span>
-      ) : null}
+      {command.label}
     </button>
   );
 }
@@ -68,17 +55,13 @@ function CommandMenu({
     <details name={MENUS_NAME} className={styles.menu}>
       <summary className={styles.menuTrigger}>{menu.label}</summary>
       <div className={styles.menuContent}>
-        {menu.items.map((entry, index) =>
-          entry.type === "separator" ? (
-            <div key={index} aria-hidden="true" className={styles.menuSeparator} />
-          ) : (
-            <CommandMenuItem
-              key={entry.command.label}
-              item={entry}
-              onCommandExecute={onCommandExecute}
-            />
-          )
-        )}
+        {menu.commands.map((command) => (
+          <CommandMenuItem
+            key={command.label}
+            command={command}
+            onCommandExecute={onCommandExecute}
+          />
+        ))}
       </div>
     </details>
   );
