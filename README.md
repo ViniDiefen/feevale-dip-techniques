@@ -1,75 +1,74 @@
-# Welcome to Feevale DIP Techniques!
+# Feevale DIP Techniques
 
-A modern, production-ready template for building full-stack React applications using React Router.
+A browser app to apply and study Digital Image Processing (DIP) techniques from the Feevale DIP course.
 
-## Getting Started
+Load an image, pick techniques from the menu and stack them as layers. Each layer has its own parameters, and layers can be reordered by dragging.
 
-### Installation
+## Techniques
 
-Install the dependencies:
+- **Geometric transforms:** translation, scale, rotation, mirror
+- **Filters:** grayscale, brightness, contrast
+- **Low-pass:** mean, mode
+- **High-pass:** Roberts, Sobel
+
+## Getting started
 
 ```bash
 npm install
-```
-
-### Development
-
-Start the development server with HMR:
-
-```bash
 npm run dev
 ```
 
-Your application will be available at `http://localhost:5173`.
+The app runs at `http://localhost:5173`. In development the sample image (`public/lena.jpg`) loads automatically.
 
-## Building for Production
+Other scripts:
 
-Create a production build:
+- `npm run typecheck` — type check
+- `npm run build` — static build into `build/client/` (the app runs fully in the browser, with no server)
 
-```bash
-npm run build
-```
-
-## Deployment
-
-### Docker Deployment
-
-To build and run using Docker:
-
-```bash
-docker build -t my-app .
-
-# Run the container
-docker run -p 3000:3000 my-app
-```
-
-The containerized application can be deployed to any platform that supports Docker, including:
-
-- AWS ECS
-- Google Cloud Run
-- Azure Container Apps
-- Digital Ocean App Platform
-- Fly.io
-- Railway
-
-### DIY Deployment
-
-If you're familiar with deploying Node applications, the built-in app server is production-ready.
-
-Make sure to deploy the output of `npm run build`
+## Project structure
 
 ```
-├── package.json
-├── package-lock.json (or pnpm-lock.yaml, or bun.lockb)
-├── build/
-│   ├── client/    # Static assets
-│   └── server/    # Server-side code
+app/
+├── root.tsx                  HTML shell
+├── routes.ts                 single route: "/" → routes/home.tsx
+├── routes/home.tsx           editor page: connects the components to useEditor
+├── hooks/useEditor.ts        editor state and actions (image, layers, selection)
+├── layers/
+│   ├── types.ts              Layer: { id, command, params }
+│   └── layers.ts             pure functions to create, apply, move and remove layers
+├── commands/                 the DIP techniques
+│   ├── types.ts              Command interface and parameter schemas
+│   ├── pixels.ts             point operations: each pixel depends only on itself
+│   ├── convolution.ts        local operations: each pixel depends on its neighborhood
+│   ├── geometric.ts          geometric transforms with a 3×3 matrix
+│   ├── transforms/           translation, scale, rotation, mirror
+│   ├── filters/              grayscale, brightness, contrast
+│   ├── low-pass/             mean, mode
+│   └── high-pass/            edge detectors (Roberts, Sobel)
+│       └── edges.ts          shared gradient edge detector
+├── data/menu.ts              menus and the commands in each one
+├── components/
+│   ├── Menubar.tsx           top menus; clicking a command adds a layer
+│   ├── ImagePicker.tsx       drag and drop or file selection (up to 5 MB)
+│   ├── ImagePreview.tsx      draws the processed image
+│   ├── LayersPanel.tsx       layer list: select, remove, drag to reorder
+│   ├── CommandParamsPanel.tsx  sliders and selects for the selected layer
+│   └── FloatingPanel.tsx     draggable panel used by the two panels above
+├── lib/image.ts              loads a File into a canvas
+└── app.css                   Tailwind theme
+public/
+└── lena.jpg                  sample image
 ```
 
-## Styling
+## How it works
 
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever CSS framework you prefer.
+1. Each technique is a class that implements `Command`: a `label`, an `icon`, the `params` it shows in the panel, its `defaultParams` and an `execute(image, params)` method that takes a canvas and returns a new one.
+2. Picking a technique in the menu creates a layer with that command and its default parameters.
+3. Whenever the layers change, `applyLayers` starts from the original image and runs every layer, from the oldest to the newest. The original image is never modified.
+4. Most commands don't loop over pixels themselves. They pass a formula, a mask or a matrix to `processPixels`, `filterImage` or `applyMatrix`.
 
----
+## Adding a technique
 
-Built with ❤️ using React Router.
+1. Create a class in the matching `app/commands/` folder that implements `Command<YourParams>`.
+2. Describe its parameters in `params`: `"number"` becomes a slider and `"select"` becomes a dropdown.
+3. Add an instance to a menu in `app/data/menu.ts`.
