@@ -2,13 +2,10 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import type { Command } from "@/commands/types";
 import {
   applyLayers,
-  createCommandLayer,
-  createImageLayer,
+  createLayer,
   findLayer,
-  getImageLayer,
-  listCommandLayers,
+  moveLayer,
   removeLayer as removeLayerFromList,
-  reorderCommandLayers,
   updateLayerParams as updateParamsInList,
 } from "@/layers/layers";
 import type { Layer } from "@/layers/types";
@@ -26,7 +23,7 @@ export function useEditor() {
     fileToCanvas(file)
       .then((canvas) => {
         setOriginalCanvas(canvas);
-        setLayers([createImageLayer(file)]);
+        setLayers([]);
       })
       .catch(() => {
         setImage(undefined);
@@ -59,8 +56,8 @@ export function useEditor() {
   const executeCommand = useCallback(
     (command: Command<any>) => {
       if (!originalCanvas) return;
-      const layer = createCommandLayer(command);
-      setLayers((prev) => [...prev, layer]);
+      const layer = createLayer(command);
+      setLayers((prev) => [layer, ...prev]);
       setSelectedLayerId(layer.id);
     },
     [originalCanvas]
@@ -80,7 +77,7 @@ export function useEditor() {
   }, []);
 
   const reorderLayers = useCallback((fromIndex: number, toIndex: number) => {
-    setLayers((prev) => reorderCommandLayers(prev, fromIndex, toIndex));
+    setLayers((prev) => moveLayer(prev, fromIndex, toIndex));
   }, []);
 
   const [processedCanvas, setProcessedCanvas] = useState<HTMLCanvasElement>();
@@ -95,8 +92,6 @@ export function useEditor() {
     return () => cancelAnimationFrame(frame);
   }, [originalCanvas, layers]);
 
-  const commandLayers = useMemo(() => listCommandLayers(layers), [layers]);
-  const imageLayer = useMemo(() => getImageLayer(layers), [layers]);
   const selectedLayer = useMemo(
     () => findLayer(layers, selectedLayerId),
     [layers, selectedLayerId]
@@ -105,8 +100,7 @@ export function useEditor() {
   return {
     image,
     processedCanvas,
-    commandLayers,
-    imageLayer,
+    layers,
     selectedLayer,
     loadImage,
     removeImage,

@@ -25,8 +25,7 @@ export default function Home() {
   const {
     image,
     processedCanvas,
-    commandLayers,
-    imageLayer,
+    layers,
     selectedLayer,
     loadImage,
     removeImage,
@@ -45,10 +44,10 @@ export default function Home() {
 
       {image !== undefined ? <ImagePreview canvas={processedCanvas} /> : null}
 
-      {image !== undefined && imageLayer !== undefined ? (
+      {image !== undefined ? (
         <LayersPanel
-          commandLayers={commandLayers}
-          imageLayer={imageLayer}
+          layers={layers}
+          imageName={image.name}
           selectedLayerId={selectedLayer?.id ?? null}
           onSelect={selectLayer}
           onRemove={removeLayer}
@@ -57,7 +56,7 @@ export default function Home() {
         />
       ) : null}
 
-      {selectedLayer !== undefined && selectedLayer.type === "command" ? (
+      {selectedLayer !== undefined ? (
         <CommandParamsPanel
           layer={selectedLayer}
           onParamsChange={(params) => updateLayerParams(selectedLayer.id, params)}

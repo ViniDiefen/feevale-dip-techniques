@@ -2,7 +2,7 @@ import { useCallback } from "react";
 import { GripVertical, Image as ImageIcon, Trash2 } from "lucide-react";
 import { DragDropProvider, type DragEndEvent } from "@dnd-kit/react";
 import { isSortable, useSortable } from "@dnd-kit/react/sortable";
-import type { CommandLayer, ImageLayer } from "@/layers/types";
+import type { Layer } from "@/layers/types";
 import { FloatingPanel, PANEL_HEIGHT } from "./FloatingPanel";
 
 const styles = {
@@ -32,7 +32,7 @@ function LayerRow({
   onSelect,
   onRemove,
 }: {
-  layer: CommandLayer;
+  layer: Layer;
   index: number;
   selected: boolean;
   onSelect: (id: string) => void;
@@ -68,16 +68,16 @@ function LayerRow({
 }
 
 export function LayersPanel({
-  commandLayers,
-  imageLayer,
+  layers,
+  imageName,
   selectedLayerId,
   onSelect,
   onRemove,
   onReorder,
   onImageRemove,
 }: {
-  commandLayers: CommandLayer[];
-  imageLayer: ImageLayer;
+  layers: Layer[];
+  imageName: string;
   selectedLayerId: string | null;
   onSelect: (id: string) => void;
   onRemove: (id: string) => void;
@@ -103,7 +103,7 @@ export function LayersPanel({
       footer={
         <div className={styles.imageFooter}>
           <ImageIcon size={14} className={styles.imageIcon} />
-          <span className={styles.imageName}>{imageLayer.image.name}</span>
+          <span className={styles.imageName}>{imageName}</span>
           <button
             type="button"
             className={styles.imageRemoveButton}
@@ -115,12 +115,12 @@ export function LayersPanel({
         </div>
       }
     >
-      {commandLayers.length === 0 ? (
+      {layers.length === 0 ? (
         <div className={styles.empty}>Nenhuma camada aplicada</div>
       ) : (
         <DragDropProvider onDragEnd={handleDragEnd}>
           <ul className={styles.list}>
-            {commandLayers.map((layer, index) => (
+            {layers.map((layer, index) => (
               <LayerRow
                 key={layer.id}
                 layer={layer}

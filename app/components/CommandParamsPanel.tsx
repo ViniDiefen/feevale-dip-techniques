@@ -1,7 +1,9 @@
 import { RotateCcw } from "lucide-react";
 import type { NumberParamSchema, SelectParamSchema } from "@/commands/types";
-import type { CommandLayer } from "@/layers/types";
-import { FloatingPanel, PANEL_WIDTH } from "./FloatingPanel";
+import type { Layer } from "@/layers/types";
+import { FloatingPanel, PANEL_MARGIN, PANEL_WIDTH } from "./FloatingPanel";
+
+const PARAMS_PANEL_HEIGHT = 200;
 
 const styles = {
   params: "flex flex-col gap-3 p-3",
@@ -78,17 +80,18 @@ export function CommandParamsPanel({
   layer,
   onParamsChange,
 }: {
-  layer: CommandLayer;
+  layer: Layer;
   onParamsChange: (params: any) => void;
 }) {
   return (
     <FloatingPanel
       title={`${layer.command.label} — Parâmetros`}
       defaultPosition={{
-        x: window.innerWidth - PANEL_WIDTH - PANEL_WIDTH - 6,
-        y: window.innerHeight - 200 - 3,
+        // To the left of the layers panel.
+        x: window.innerWidth - 2 * PANEL_WIDTH - 2 * PANEL_MARGIN,
+        y: window.innerHeight - PARAMS_PANEL_HEIGHT - PANEL_MARGIN,
       }}
-      height={200}
+      height={PARAMS_PANEL_HEIGHT}
     >
       {layer.command.params.length === 0 ? (
         <div className={styles.paramsEmpty}>

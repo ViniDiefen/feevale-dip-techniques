@@ -31,13 +31,13 @@ export function FloatingPanel({
   children,
   footer,
   defaultPosition,
-  height = 168,
+  height,
 }: {
   title: string;
   children: ReactNode;
   footer?: ReactNode;
   defaultPosition?: { x: number; y: number };
-  height?: number;
+  height: number;
 }) {
   const nodeRef = useRef<HTMLDivElement>(null);
   const [position, setPosition] = useState(() =>
