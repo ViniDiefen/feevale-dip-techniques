@@ -1,37 +1,39 @@
-import { ScanIcon } from "lucide-react";
+import { FocusIcon } from "lucide-react";
 import type { Command } from "../types";
 import { GrayscaleCommand } from "../filters/grayscale";
 import { applyConvolutionMagnitude } from "../matrix";
 
 const KERNEL_X = [
-  [1, 0],
-  [0, -1],
+  [1, 0, -1],
+  [2, 0, -2],
+  [1, 0, -1],
 ];
 const KERNEL_Y = [
-  [0, 1],
-  [-1, 0],
+  [1, 2, 1],
+  [0, 0, 0],
+  [-1, -2, -1],
 ];
 
-export interface RobertsParams {
+export interface SobelParams {
   threshold: number;
 }
 
-export class RobertsCommand implements Command<RobertsParams> {
-  label = "Roberts";
-  icon = ScanIcon;
+export class SobelCommand implements Command<SobelParams> {
+  label = "Sobel";
+  icon = FocusIcon;
   params = [
     {
       key: "threshold",
-      label: "Limiar",
+      label: "Threshold",
       type: "number" as const,
       min: 0,
       max: 255,
       step: 1,
     },
   ];
-  defaultParams: RobertsParams = { threshold: 50 };
+  defaultParams: SobelParams = { threshold: 50 };
 
-  execute(image: HTMLCanvasElement, params: RobertsParams): HTMLCanvasElement {
+  execute(image: HTMLCanvasElement, params: SobelParams): HTMLCanvasElement {
     const grayscale = new GrayscaleCommand().execute(image, {
       method: "luminosity",
     });

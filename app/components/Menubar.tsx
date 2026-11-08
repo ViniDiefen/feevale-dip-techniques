@@ -95,7 +95,7 @@ export function Menubar({
   }, []);
 
   return (
-    <nav className={styles.menubar} aria-label="Menus de edição">
+    <nav className={styles.menubar} aria-label="Editor menus">
       {menus.map((menu) => (
         <CommandMenu
           key={menu.label}

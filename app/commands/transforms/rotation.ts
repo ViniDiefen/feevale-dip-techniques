@@ -19,12 +19,12 @@ function rotationMatrix(degrees: number): Matrix3x3 {
 }
 
 export class RotationCommand implements Command<RotationParams> {
-  label = "Rotação";
+  label = "Rotation";
   icon = RotateCwIcon;
   params = [
     {
       key: "degrees",
-      label: "Graus",
+      label: "Degrees",
       type: "number" as const,
       min: -360,
       max: 360,

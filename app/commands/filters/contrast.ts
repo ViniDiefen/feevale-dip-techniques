@@ -7,12 +7,12 @@ export interface ContrastParams {
 }
 
 export class ContrastCommand implements Command<ContrastParams> {
-  label = "Contraste";
+  label = "Contrast";
   icon = ContrastIcon;
   params = [
     {
       key: "factor",
-      label: "Fator",
+      label: "Factor",
       type: "number" as const,
       min: 0,
       max: 3,

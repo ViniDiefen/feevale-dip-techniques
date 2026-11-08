@@ -7,12 +7,12 @@ export interface BrightnessParams {
 }
 
 export class BrightnessCommand implements Command<BrightnessParams> {
-  label = "Brilho";
+  label = "Brightness";
   icon = SunIcon;
   params = [
     {
       key: "amount",
-      label: "Quantidade",
+      label: "Amount",
       type: "number" as const,
       min: -255,
       max: 255,

@@ -16,12 +16,12 @@ function translationMatrix(dx: number, dy: number): Matrix3x3 {
 }
 
 export class TranslationCommand implements Command<TranslationParams> {
-  label = "Translação";
+  label = "Translation";
   icon = MoveIcon;
   params = [
     {
       key: "dx",
-      label: "Deslocamento X",
+      label: "Offset X",
       type: "number" as const,
       min: -200,
       max: 200,
@@ -29,7 +29,7 @@ export class TranslationCommand implements Command<TranslationParams> {
     },
     {
       key: "dy",
-      label: "Deslocamento Y",
+      label: "Offset Y",
       type: "number" as const,
       min: -200,
       max: 200,

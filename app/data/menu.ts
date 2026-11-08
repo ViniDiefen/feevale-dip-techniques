@@ -6,10 +6,10 @@ import { MirrorCommand } from "@/commands/transforms/mirror";
 import { GrayscaleCommand } from "@/commands/filters/grayscale";
 import { BrightnessCommand } from "@/commands/filters/brightness";
 import { ContrastCommand } from "@/commands/filters/contrast";
-import { MediaCommand } from "@/commands/passa-baixas/media";
-import { ModaCommand } from "@/commands/passa-baixas/moda";
-import { RobertsCommand } from "@/commands/passa-altas/roberts";
-import { SobelCommand } from "@/commands/passa-altas/sobel";
+import { MeanCommand } from "@/commands/low-pass/mean";
+import { ModeCommand } from "@/commands/low-pass/mode";
+import { RobertsCommand } from "@/commands/high-pass/roberts";
+import { SobelCommand } from "@/commands/high-pass/sobel";
 
 export type Menu = {
   label: string;
@@ -18,7 +18,7 @@ export type Menu = {
 
 export const menus: Menu[] = [
   {
-    label: "Transformações Geométricas",
+    label: "Geometric Transforms",
     commands: [
       new TranslationCommand(),
       new ScaleCommand(),
@@ -27,7 +27,7 @@ export const menus: Menu[] = [
     ],
   },
   {
-    label: "Filtros",
+    label: "Filters",
     commands: [
       new GrayscaleCommand(),
       new BrightnessCommand(),
@@ -35,14 +35,14 @@ export const menus: Menu[] = [
     ],
   },
   {
-    label: "Passa-baixas",
+    label: "Low-pass",
     commands: [
-      new MediaCommand(),
-      new ModaCommand(),
+      new MeanCommand(),
+      new ModeCommand(),
     ],
   },
   {
-    label: "Passa-altas",
+    label: "High-pass",
     commands: [
       new RobertsCommand(),
       new SobelCommand(),

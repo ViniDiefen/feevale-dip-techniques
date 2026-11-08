@@ -22,12 +22,12 @@ function mirrorMatrix(direction: "horizontal" | "vertical", width: number, heigh
 }
 
 export class MirrorCommand implements Command<MirrorParams> {
-  label = "Espelhamento";
+  label = "Mirror";
   icon = FlipHorizontalIcon;
   params = [
     {
       key: "direction",
-      label: "Direção",
+      label: "Direction",
       type: "select" as const,
       options: [
         { value: "horizontal", label: "Horizontal" },

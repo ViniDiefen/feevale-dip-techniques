@@ -7,17 +7,17 @@ export interface GrayscaleParams {
 }
 
 export class GrayscaleCommand implements Command<GrayscaleParams> {
-  label = "Escala de cinza";
+  label = "Grayscale";
   icon = BlendIcon;
   params = [
     {
       key: "method",
-      label: "Método",
+      label: "Method",
       type: "select" as const,
       options: [
-        { value: "luminosity", label: "Luminosidade (BT.601)" },
-        { value: "average", label: "Média simples" },
-        { value: "desaturation", label: "Desaturação (BT.709)" },
+        { value: "luminosity", label: "Luminosity (BT.601)" },
+        { value: "average", label: "Simple average" },
+        { value: "desaturation", label: "Desaturation (BT.709)" },
       ],
     },
   ];

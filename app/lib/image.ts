@@ -7,13 +7,13 @@ export function fileToCanvas(file: File): Promise<HTMLCanvasElement> {
       canvas.height = img.height;
       const ctx = canvas.getContext("2d", { willReadFrequently: true });
       if (!ctx) {
-        reject(new Error("Canvas 2D não suportado neste navegador."));
+        reject(new Error("Canvas 2D is not supported in this browser."));
         return;
       }
       ctx.drawImage(img, 0, 0);
       resolve(canvas);
     };
-    img.onerror = () => reject(new Error("Não foi possível carregar a imagem."));
+    img.onerror = () => reject(new Error("Could not load the image."));
     img.src = URL.createObjectURL(file);
   });
 }

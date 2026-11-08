@@ -59,7 +59,7 @@ function LayerRow({
           event.stopPropagation();
           onRemove(layer.id);
         }}
-        aria-label="Remover camada"
+        aria-label="Remove layer"
       >
         <Trash2 size={14} />
       </button>
@@ -98,7 +98,7 @@ export function LayersPanel({
 
   return (
     <FloatingPanel
-      title="Camadas"
+      title="Layers"
       height={PANEL_HEIGHT}
       footer={
         <div className={styles.imageFooter}>
@@ -108,7 +108,7 @@ export function LayersPanel({
             type="button"
             className={styles.imageRemoveButton}
             onClick={onImageRemove}
-            aria-label="Remover imagem"
+            aria-label="Remove image"
           >
             <Trash2 size={14} />
           </button>
@@ -116,7 +116,7 @@ export function LayersPanel({
       }
     >
       {layers.length === 0 ? (
-        <div className={styles.empty}>Nenhuma camada aplicada</div>
+        <div className={styles.empty}>No layers applied</div>
       ) : (
         <DragDropProvider onDragEnd={handleDragEnd}>
           <ul className={styles.list}>

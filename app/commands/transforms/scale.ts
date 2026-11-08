@@ -15,12 +15,12 @@ function scaleMatrix(sx: number, sy: number): Matrix3x3 {
 }
 
 export class ScaleCommand implements Command<ScaleParams> {
-  label = "Escala";
+  label = "Scale";
   icon = ScalingIcon;
   params = [
     {
       key: "factor",
-      label: "Fator",
+      label: "Factor",
       type: "number" as const,
       min: 0.1,
       max: 3,

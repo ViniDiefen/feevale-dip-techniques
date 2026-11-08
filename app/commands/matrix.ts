@@ -54,7 +54,7 @@ function invertMatrix(m: Matrix3x3): Matrix3x3 {
 function assertSquareKernel(kernel: number[][]): number {
   const size = kernel.length;
   if (size === 0 || kernel.some((row) => row.length !== size)) {
-    throw new Error("Kernel deve ser uma matriz quadrada não vazia.");
+    throw new Error("Kernel must be a non-empty square matrix.");
   }
   return size;
 }

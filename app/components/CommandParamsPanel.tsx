@@ -85,7 +85,7 @@ export function CommandParamsPanel({
 }) {
   return (
     <FloatingPanel
-      title={`${layer.command.label} — Parâmetros`}
+      title={`${layer.command.label} — Parameters`}
       defaultPosition={{
         // To the left of the layers panel.
         x: window.innerWidth - 2 * PANEL_WIDTH - 2 * PANEL_MARGIN,
@@ -95,7 +95,7 @@ export function CommandParamsPanel({
     >
       {layer.command.params.length === 0 ? (
         <div className={styles.paramsEmpty}>
-          Este comando não possui parâmetros editáveis
+          This command has no editable parameters
         </div>
       ) : (
         <div className={styles.params}>
@@ -132,7 +132,7 @@ export function CommandParamsPanel({
             onClick={() => onParamsChange(layer.command.defaultParams)}
           >
             <RotateCcw size={12} />
-            Restaurar padrão
+            Reset to default
           </button>
         </div>
       )}

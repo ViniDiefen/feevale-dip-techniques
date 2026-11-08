@@ -17,8 +17,8 @@ function uploadErrorMessage(rejections: readonly FileRejection[]): string | unde
   const error = rejections[0]?.errors[0];
   if (!error) return undefined;
   return error.code === ErrorCode.FileTooLarge
-    ? `A imagem deve ter no máximo ${MAX_IMAGE_SIZE_MB} MB.`
-    : "Selecione um arquivo de imagem.";
+    ? `The image must be at most ${MAX_IMAGE_SIZE_MB} MB.`
+    : "Select an image file.";
 }
 
 export function ImagePicker({
@@ -45,9 +45,9 @@ export function ImagePicker({
       })}
     >
       <input {...getInputProps()} />
-      <p className={styles.placeholder}>Arraste e solte uma imagem aqui</p>
+      <p className={styles.placeholder}>Drag and drop an image here</p>
       <button type="button" onClick={open} className={styles.dropzoneButton}>
-        Selecionar arquivo
+        Select file
       </button>
       {uploadError ? (
         <p className={styles.uploadError} role="alert">

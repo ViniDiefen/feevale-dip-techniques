@@ -2,7 +2,7 @@ import { ChartBarIcon } from "lucide-react";
 import type { Command } from "../types";
 import { mapNeighborhood } from "../matrix";
 
-export interface ModaParams {
+export interface ModeParams {
   size: "3" | "5" | "7";
 }
 
@@ -49,13 +49,13 @@ function createModeVisit(size: number) {
   };
 }
 
-export class ModaCommand implements Command<ModaParams> {
-  label = "Moda";
+export class ModeCommand implements Command<ModeParams> {
+  label = "Mode";
   icon = ChartBarIcon;
   params = [
     {
       key: "size",
-      label: "Janela",
+      label: "Window",
       type: "select" as const,
       options: [
         { value: "3", label: "3 × 3" },
@@ -64,9 +64,9 @@ export class ModaCommand implements Command<ModaParams> {
       ],
     },
   ];
-  defaultParams: ModaParams = { size: "3" };
+  defaultParams: ModeParams = { size: "3" };
 
-  execute(image: HTMLCanvasElement, params: ModaParams): HTMLCanvasElement {
+  execute(image: HTMLCanvasElement, params: ModeParams): HTMLCanvasElement {
     const size = Number(params.size);
     return mapNeighborhood(image, size, createModeVisit(size));
   }
