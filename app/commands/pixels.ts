@@ -5,6 +5,8 @@ export type PixelProcessor = (
   a: number
 ) => [number, number, number, number];
 
+// Point operation: each output pixel depends only on the pixel
+// at the same position in the input image.
 export function processPixels(
   source: HTMLCanvasElement,
   processor: PixelProcessor
@@ -19,10 +21,10 @@ export function processPixels(
 
   for (let i = 0; i < data.length; i += 4) {
     const [r, g, b, a] = processor(data[i], data[i + 1], data[i + 2], data[i + 3]);
-    data[i] = Math.max(0, Math.min(255, r));
-    data[i + 1] = Math.max(0, Math.min(255, g));
-    data[i + 2] = Math.max(0, Math.min(255, b));
-    data[i + 3] = Math.max(0, Math.min(255, a));
+    data[i] = clamp(r);
+    data[i + 1] = clamp(g);
+    data[i + 2] = clamp(b);
+    data[i + 3] = clamp(a);
   }
 
   const destCtx = canvas.getContext("2d", { willReadFrequently: true })!;

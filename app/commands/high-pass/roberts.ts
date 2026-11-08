@@ -1,13 +1,14 @@
 import { ScanIcon } from "lucide-react";
 import type { Command } from "../types";
-import { GrayscaleCommand } from "../filters/grayscale";
-import { applyConvolutionMagnitude } from "../matrix";
+import { detectEdges } from "./edges";
 
-const KERNEL_X = [
+// G1 = f(x,y) − f(x+1,y+1)
+const MASK_G1 = [
   [1, 0],
   [0, -1],
 ];
-const KERNEL_Y = [
+// G2 = f(x+1,y) − f(x,y+1)
+const MASK_G2 = [
   [0, 1],
   [-1, 0],
 ];
@@ -32,14 +33,6 @@ export class RobertsCommand implements Command<RobertsParams> {
   defaultParams: RobertsParams = { threshold: 50 };
 
   execute(image: HTMLCanvasElement, params: RobertsParams): HTMLCanvasElement {
-    const grayscale = new GrayscaleCommand().execute(image, {
-      method: "luminosity",
-    });
-    return applyConvolutionMagnitude(
-      grayscale,
-      KERNEL_X,
-      KERNEL_Y,
-      params.threshold
-    );
+    return detectEdges(image, MASK_G1, MASK_G2, params.threshold);
   }
 }

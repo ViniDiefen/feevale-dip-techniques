@@ -1,23 +1,15 @@
 import { Grid3x3Icon } from "lucide-react";
 import type { Command } from "../types";
-import { applyConvolutionMagnitude } from "../matrix";
+import { convolve, filterImage, type Mask } from "../convolution";
 
 export interface MeanParams {
   size: "3" | "5" | "7";
 }
 
-function meanKernel(size: number): number[][] {
-  const weight = 1 / (size * size);
-  return Array.from({ length: size }, () =>
-    Array.from({ length: size }, () => weight)
-  );
+// n×n mask with every coefficient equal to 1.
+function onesMask(size: number): Mask {
+  return Array.from({ length: size }, () => Array.from({ length: size }, () => 1));
 }
-
-const MEAN_KERNELS: Record<MeanParams["size"], number[][]> = {
-  "3": meanKernel(3),
-  "5": meanKernel(5),
-  "7": meanKernel(7),
-};
 
 export class MeanCommand implements Command<MeanParams> {
   label = "Mean";
@@ -37,6 +29,9 @@ export class MeanCommand implements Command<MeanParams> {
   defaultParams: MeanParams = { size: "3" };
 
   execute(image: HTMLCanvasElement, params: MeanParams): HTMLCanvasElement {
-    return applyConvolutionMagnitude(image, MEAN_KERNELS[params.size]);
+    const size = Number(params.size);
+    const mask = onesMask(size);
+    // Center pixel = window sum divided by the number of pixels (n²).
+    return filterImage(image, size, (pixels, x, y, c) => convolve(pixels, mask, x, y, c) / (size * size));
   }
 }

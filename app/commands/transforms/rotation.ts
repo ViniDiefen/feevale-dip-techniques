@@ -1,6 +1,6 @@
 import { RotateCwIcon } from "lucide-react";
 import type { Command } from "../types";
-import { applyMatrix, type Matrix3x3 } from "../matrix";
+import { applyMatrix, type Matrix3x3 } from "../geometric";
 
 export interface RotationParams {
   degrees: number;

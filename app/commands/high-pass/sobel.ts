@@ -1,17 +1,16 @@
 import { FocusIcon } from "lucide-react";
 import type { Command } from "../types";
-import { GrayscaleCommand } from "../filters/grayscale";
-import { applyConvolutionMagnitude } from "../matrix";
+import { detectEdges } from "./edges";
 
-const KERNEL_X = [
-  [1, 0, -1],
-  [2, 0, -2],
-  [1, 0, -1],
+const MASK_X = [
+  [-1, 0, 1],
+  [-2, 0, 2],
+  [-1, 0, 1],
 ];
-const KERNEL_Y = [
-  [1, 2, 1],
-  [0, 0, 0],
+const MASK_Y = [
   [-1, -2, -1],
+  [0, 0, 0],
+  [1, 2, 1],
 ];
 
 export interface SobelParams {
@@ -34,14 +33,6 @@ export class SobelCommand implements Command<SobelParams> {
   defaultParams: SobelParams = { threshold: 50 };
 
   execute(image: HTMLCanvasElement, params: SobelParams): HTMLCanvasElement {
-    const grayscale = new GrayscaleCommand().execute(image, {
-      method: "luminosity",
-    });
-    return applyConvolutionMagnitude(
-      grayscale,
-      KERNEL_X,
-      KERNEL_Y,
-      params.threshold
-    );
+    return detectEdges(image, MASK_X, MASK_Y, params.threshold);
   }
 }
