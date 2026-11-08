@@ -6,6 +6,9 @@ export interface MirrorParams {
   direction: "horizontal" | "vertical";
 }
 
+// Slide matrix with -1 on the diagonal. The -1 alone would move the image
+// to negative coordinates (off screen), so we add a translation of
+// (width - 1) or (height - 1) to bring it back.
 function mirrorMatrix(direction: "horizontal" | "vertical", width: number, height: number): Matrix3x3 {
   if (direction === "horizontal") {
     return [
