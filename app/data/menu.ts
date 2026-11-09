@@ -15,6 +15,9 @@ import { DilationCommand } from "@/commands/morphology/dilation";
 import { ErosionCommand } from "@/commands/morphology/erosion";
 import { OpeningCommand } from "@/commands/morphology/opening";
 import { ClosingCommand } from "@/commands/morphology/closing";
+import { StentifordCommand } from "@/commands/thinning/stentiford";
+import { ZhangSuenCommand } from "@/commands/thinning/zhang-suen";
+import { HoltCommand } from "@/commands/thinning/holt";
 
 export type Menu = {
   label: string;
@@ -61,6 +64,14 @@ export const menus: Menu[] = [
       new ErosionCommand(),
       new OpeningCommand(),
       new ClosingCommand(),
+    ],
+  },
+  {
+    label: "Thinning",
+    commands: [
+      new StentifordCommand(),
+      new ZhangSuenCommand(),
+      new HoltCommand(),
     ],
   },
 ];
