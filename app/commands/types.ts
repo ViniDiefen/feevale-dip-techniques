@@ -16,7 +16,15 @@ export interface SelectParamSchema {
   options: { value: string; label: string }[];
 }
 
-export type ParamSchema = NumberParamSchema | SelectParamSchema;
+// Row of buttons; options with an icon show it instead of the label.
+export interface SegmentedParamSchema {
+  key: string;
+  label: string;
+  type: "segmented";
+  options: { value: string; label: string; icon?: LucideIcon }[];
+}
+
+export type ParamSchema = NumberParamSchema | SelectParamSchema | SegmentedParamSchema;
 
 export interface Command<P = void> {
   label: string;

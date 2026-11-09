@@ -10,6 +10,8 @@ import { MeanCommand } from "@/commands/low-pass/mean";
 import { ModeCommand } from "@/commands/low-pass/mode";
 import { RobertsCommand } from "@/commands/high-pass/roberts";
 import { SobelCommand } from "@/commands/high-pass/sobel";
+import { DilationCommand } from "@/commands/morphology/dilation";
+import { ErosionCommand } from "@/commands/morphology/erosion";
 
 export type Menu = {
   label: string;
@@ -46,6 +48,13 @@ export const menus: Menu[] = [
     commands: [
       new RobertsCommand(),
       new SobelCommand(),
+    ],
+  },
+  {
+    label: "Morphology",
+    commands: [
+      new DilationCommand(),
+      new ErosionCommand(),
     ],
   },
 ];
