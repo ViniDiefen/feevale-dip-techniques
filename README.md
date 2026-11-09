@@ -57,7 +57,8 @@ app/
 ├── lib/image.ts              loads a File into a canvas
 └── app.css                   Tailwind theme
 public/
-└── lena.jpg                  sample image
+├── lena.jpg                  sample image
+└── fingerprint.jpg           sample image for testing morphology
 ```
 
 ## How it works
