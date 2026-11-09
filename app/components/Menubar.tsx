@@ -38,7 +38,7 @@ function CommandMenuItem({
         onCommandExecute(command);
       }}
     >
-      <Icon />
+      {Icon ? <Icon /> : null}
       {command.label}
     </button>
   );

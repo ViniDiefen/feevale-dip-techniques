@@ -50,7 +50,7 @@ function LayerRow({
       onClick={() => onSelect(layer.id)}
     >
       <GripVertical size={14} className={styles.dragHandle} />
-      <Icon size={14} className={styles.itemIcon} />
+      {Icon ? <Icon size={14} className={styles.itemIcon} /> : null}
       <span className={styles.itemName}>{layer.command.label}</span>
       <button
         type="button"

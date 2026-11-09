@@ -28,7 +28,8 @@ export type ParamSchema = NumberParamSchema | SelectParamSchema | SegmentedParam
 
 export interface Command<P = void> {
   label: string;
-  icon: LucideIcon;
+  // Optional: commands without one show only their label.
+  icon?: LucideIcon;
   params: ParamSchema[];
   defaultParams: P;
   execute(image: HTMLCanvasElement, params: P): HTMLCanvasElement;
