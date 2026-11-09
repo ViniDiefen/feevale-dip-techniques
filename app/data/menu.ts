@@ -12,6 +12,8 @@ import { RobertsCommand } from "@/commands/high-pass/roberts";
 import { SobelCommand } from "@/commands/high-pass/sobel";
 import { DilationCommand } from "@/commands/morphology/dilation";
 import { ErosionCommand } from "@/commands/morphology/erosion";
+import { OpeningCommand } from "@/commands/morphology/opening";
+import { ClosingCommand } from "@/commands/morphology/closing";
 
 export type Menu = {
   label: string;
@@ -55,6 +57,8 @@ export const menus: Menu[] = [
     commands: [
       new DilationCommand(),
       new ErosionCommand(),
+      new OpeningCommand(),
+      new ClosingCommand(),
     ],
   },
 ];
