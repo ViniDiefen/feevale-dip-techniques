@@ -6,6 +6,7 @@ import { MirrorCommand } from "@/commands/transforms/mirror";
 import { GrayscaleCommand } from "@/commands/filters/grayscale";
 import { BrightnessCommand } from "@/commands/filters/brightness";
 import { ContrastCommand } from "@/commands/filters/contrast";
+import { ThresholdCommand } from "@/commands/filters/threshold";
 import { MeanCommand } from "@/commands/low-pass/mean";
 import { ModeCommand } from "@/commands/low-pass/mode";
 import { RobertsCommand } from "@/commands/high-pass/roberts";
@@ -36,6 +37,7 @@ export const menus: Menu[] = [
       new GrayscaleCommand(),
       new BrightnessCommand(),
       new ContrastCommand(),
+      new ThresholdCommand(),
     ],
   },
   {
